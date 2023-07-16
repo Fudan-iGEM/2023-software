@@ -1,0 +1,20 @@
+{
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.6",
+    "@commitlint/config-angular": "^17.6.6",
+    "@commitlint/config-conventional": "^17.6.6",
+    "conventional-changelog-cli": "^3.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "pre-commit": "^1.2.2"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "scripts": {
+    "commit": "commit",
+    "changelogs": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
+  }
+}
