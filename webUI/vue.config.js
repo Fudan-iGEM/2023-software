@@ -1,4 +1,5 @@
 const { defineConfig } = require('@vue/cli-service')
+const CompressionPlugin = require('compression-webpack-plugin')
 module.exports = defineConfig({
   transpileDependencies: true,
   lintOnSave:false
@@ -17,7 +18,7 @@ module.exports = {
         title: 'test',
         // chunks to include on this pages, by default includes
         // extracted common chunks and vendor chunks.
-        chunks: ['chunk-vendors', 'chunk-common', 'index']
+        //chunks: ['chunk-vendors', 'chunk-common', 'index']
       },
       login: {
         // entry for the pages
@@ -43,5 +44,13 @@ module.exports = {
         }
       }
     }
+  },
+  chainWebpack: (config) => {
+    config.plugin('compressionPlugin').use(new CompressionPlugin({
+      test: /\.(js|css|less)$/, // 匹配文件名
+      threshold: 1024, // 对超过10k的数据压缩
+      deleteOriginalAssets: false, // 不删除源文件
+      minRatio: 0.3, // 压缩比
+    }))
   },
 }

@@ -43,7 +43,7 @@ export default {
   user-select: none;
 }
 .home{
-  background: url("@/assets/bg.png") center/cover no-repeat;
+  background: url("@/assets/bg.svg") center/cover no-repeat;
   padding: 0;
   height: 100vh;
   display: flex;

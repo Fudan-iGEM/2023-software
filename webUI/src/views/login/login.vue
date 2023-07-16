@@ -66,7 +66,7 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
-  background: url("@/assets/bg.png") center/cover no-repeat;
+  background: url("@/assets/bg.svg") center/cover no-repeat;
 }
 .login-box {
     max-width: 60%;
