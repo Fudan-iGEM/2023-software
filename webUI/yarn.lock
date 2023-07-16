@@ -4214,11 +4214,6 @@
   dependencies:
     "js-tokens" "^3.0.0 || ^4.0.0"
 
-"lottie-web@^5.1.9", "lottie-web@^5.12.2":
-  "integrity" "sha512-uvhvYPC8kGPjXT3MyKMrL3JitEAmDMp30lVkuq/590Mw9ok6pWcFCwXJveo0t5uqYw1UREQHofD+jVpdjBv8wg=="
-  "resolved" "https://registry.npmjs.org/lottie-web/-/lottie-web-5.12.2.tgz"
-  "version" "5.12.2"
-
 "lower-case@^2.0.2":
   "integrity" "sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg=="
   "resolved" "https://registry.npmmirror.com/lower-case/-/lower-case-2.0.2.tgz"
@@ -6002,6 +5997,10 @@
     "media-typer" "0.3.0"
     "mime-types" "~2.1.24"
 
+"typed.js@git+https://github.com/mattboldt/typed.js.git":
+  "resolved" "git+ssh://git@github.com/mattboldt/typed.js.git#cd02e533c772e35ad60ee48656b33e610eadaca7"
+  "version" "2.0.16"
+
 "unicode-canonical-property-names-ecmascript@^2.0.0":
   "integrity" "sha512-yY5PpDlfVIU5+y/BSCxAJRBIS1Zc2dDG3Ujq+sR0U+JjUevW2JhocOF+soROYDSaAezOzOKuyyixhD6mBknSmQ=="
   "resolved" "https://registry.npmmirror.com/unicode-canonical-property-names-ecmascript/-/unicode-canonical-property-names-ecmascript-2.0.0.tgz"
@@ -6115,13 +6114,6 @@
     "hash-sum" "^2.0.0"
     "watchpack" "^2.4.0"
 
-"vue-lottie@^0.2.1":
-  "integrity" "sha512-zInUX69Ij8MhVR3XArpu4PqqBoufwKxS5UMutWCPm59VUaB5H6GtnaIzf9M+l6aYU+Kr8gF/W9dzWLgRuU6V+Q=="
-  "resolved" "https://registry.npmjs.org/vue-lottie/-/vue-lottie-0.2.1.tgz"
-  "version" "0.2.1"
-  dependencies:
-    "lottie-web" "^5.1.9"
-
 "vue-ref@^2.0.0":
   "integrity" "sha512-uKNKpFOVeWNqS2mrBZqnpLyXJo5Q+vnkex6JvpENvhXHFNBW/SJTP8vJywLuVT3DpxwXcF9N0dyIiZ4/NpTexQ=="
   "resolved" "https://registry.npmjs.org/vue-ref/-/vue-ref-2.0.0.tgz"
@@ -6148,7 +6140,14 @@
   "resolved" "https://registry.npmmirror.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz"
   "version" "1.9.1"
 
-"vue@*", "vue@^2 || ^3.2.13", "vue@^2.5.16", "vue@^2.6.0", "vue@^2.6.14", "vue@>=2.5.0":
+"vue-typed-js@^0.1.2":
+  "integrity" "sha512-9kDGuz17uYJghe/1hepRWiWYssgUFtrKnMGPHlWjVRxdvs/d9xYYWMkgzztjhx1R1B33hXkN8ctmkzCYHQ+caA=="
+  "resolved" "https://registry.npmjs.org/vue-typed-js/-/vue-typed-js-0.1.2.tgz"
+  "version" "0.1.2"
+  dependencies:
+    "typed.js" "git+https://github.com/mattboldt/typed.js.git"
+
+"vue@*", "vue@^2 || ^3.2.13", "vue@^2.6.0", "vue@^2.6.14", "vue@>=2.5.0":
   "integrity" "sha512-b2qkFyOM0kwqWFuQmgd4o+uHGU7T+2z3T+WQp8UBjADfEv2n4FEMffzBmCKNP0IGzOEEfYjvtcC62xaSKeQDrQ=="
   "resolved" "https://registry.npmmirror.com/vue/-/vue-2.7.14.tgz"
   "version" "2.7.14"

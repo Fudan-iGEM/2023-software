@@ -16,3 +16,4 @@ config.local.js
 basement_dist
 .idea
 .yarnrc
+dist
