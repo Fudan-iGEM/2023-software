@@ -1,15 +1,13 @@
 <template>
   <div id="app">
-    <hello-world msg="Welcome to Your Vue.js App"/>
+    <h1>AABBCC</h1>
   </div>
 </template>
 
 <script>
-import HelloWorld from "@/components/HelloWorld.vue";
 
 export default {
   name: "index",
-  components: {HelloWorld}
 }
 </script>
 
@@ -20,6 +18,13 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  background: url("@/assets/bg.png") center/cover no-repeat;
+  position: relative;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 </style>
