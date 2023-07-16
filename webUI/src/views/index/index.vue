@@ -12,7 +12,7 @@
         >
           <h1 class="typing"></h1>
         </vue-typed-js>
-        <button class="btn-home"><span>Try it now!</span></button>
+        <button class="btn-home" @click="toLogin()"><span>Try it now!</span></button>
         <div class="about">
           <span>About:<a href="https://2023.igem.wiki/fudan/software">iGEM 2023, Fudan Team</a></span>
           <br>
@@ -25,6 +25,11 @@
 <script>
 export default {
   name: "index",
+  methods:{
+    toLogin(){
+        window.location.href = '/login';
+    }
+  },
 }
 </script>
 
@@ -34,7 +39,8 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: rgba(255, 255, 255, .8)
+  color: rgba(255, 255, 255, .8);
+  user-select: none;
 }
 .home{
   background: url("@/assets/bg.png") center/cover no-repeat;

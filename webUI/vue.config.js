@@ -29,9 +29,19 @@ module.exports = {
         // when using title option,
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
         title: 'Login',
-        // chunks to include on this pages, by default includes
-        // extracted common chunks and vendor chunks.
-        chunks: ['chunk-vendors', 'chunk-common', 'index']
+      }
+    },
+  css:{
+    loaderOptions:{
+      less:{
+        lessOptions: {
+          javascriptEnabled: true,
+          modifyVars: {
+            //在此处设置，也可以设置直角、边框色、字体大小等
+            'primary-color': '#68BDA8',
+          }
+        }
       }
     }
+  },
 }
