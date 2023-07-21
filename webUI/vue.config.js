@@ -30,7 +30,18 @@ module.exports = {
         // when using title option,
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
         title: 'Login',
-      }
+      },
+      home: {
+        // entry for the pages
+        entry: 'src/views/home/home.js',
+        // the source template
+        template: 'src/views/home/home.html',
+        // output as dist/index.html
+        filename: 'home.html',
+        // when using title option,
+        // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'Home',
+      },
     },
   css:{
     loaderOptions:{

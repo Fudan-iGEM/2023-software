@@ -35,7 +35,7 @@ export default {
 
 <style scoped>
 #app {
-  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-family: Barlow, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -73,7 +73,7 @@ h1 {
     width: 8rem;
     color: #fff;
     border-radius: 5px;
-    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-family: Barlow, Helvetica, Arial, sans-serif;
     font-weight: 700;
     font-size: 1rem;
     cursor: pointer;

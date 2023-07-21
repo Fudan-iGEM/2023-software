@@ -17,3 +17,5 @@ basement_dist
 .idea
 .yarnrc
 dist
+template
+static

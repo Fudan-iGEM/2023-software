@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     name: "login",
     beforeCreate() {
@@ -50,6 +52,15 @@ export default {
             this.form.validateFields((err, values) => {
                 if (!err) {
                     console.log('Received values of form: ', values);
+                    axios.post('/api/login', values)
+                        .then(response => {
+                            console.log(response.data);
+                            localStorage.setItem('token', response.data['access_token']);
+                            window.location.href = '/home';
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
                 }
             });
         },
@@ -58,7 +69,8 @@ export default {
 </script>
 <style scoped>
 #login {
-  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-family: Barlow, Helvetica, Arial, sans-serif;
+  font-weight: 500;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;
@@ -73,7 +85,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #ffffff66;
+    background: #ffffff88;
     border-radius: 0.5rem;
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
