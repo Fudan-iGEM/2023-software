@@ -35,15 +35,15 @@ export default {
 
 <style scoped>
 #app {
-  font-family: Barlow, Helvetica, Arial, sans-serif;
+  font-family: HarmonyOS_Sans, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: rgba(255, 255, 255, .8);
+  color: rgba(0, 0, 0, .8);
   user-select: none;
 }
 .home{
-  background: url("@/assets/bg.svg") center/cover no-repeat;
+  background-color: #fff5f0;
   padding: 0;
   height: 100vh;
   display: flex;
@@ -160,6 +160,6 @@ h1 {
     font-size: 1rem;
 }
 .about a{
-    color: rgba(255, 255, 255, .8);
+    color: rgba(0, 0, 0, .8);
 }
 </style>

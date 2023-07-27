@@ -69,7 +69,7 @@ export default {
 </script>
 <style scoped>
 #login {
-  font-family: Barlow, Helvetica, Arial, sans-serif;
+  font-family: HarmonyOS_Sans, Helvetica, Arial, sans-serif;
   font-weight: 500;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -78,7 +78,7 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
-  background: url("@/assets/bg.svg") center/cover no-repeat;
+  background-color: #fff5f0;
 }
 .login-box {
     max-width: 60%;
