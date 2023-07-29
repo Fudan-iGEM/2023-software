@@ -87,7 +87,16 @@
                             </a-form-item>
                         </a-form>
                 </div>
-                <a-table :columns="columns" :data-source="data" :scroll="{ x: 1500, y: 600 }" style="width: 95%">
+                <a-table
+                    :columns="columns"
+                    :data-source="data"
+                    :scroll="{ x: 1500, y: 600 }"
+                    style="width: 95%"
+                    bordered
+                >
+                    <p slot="title" style="font-weight: 700;font-size: 1rem">
+                        Your Search result of {{searchQuery}} on {{searchType}}:
+                    </p>
                     <a slot="action">action</a>
                 </a-table>
             </div>
@@ -156,6 +165,8 @@ export default {
             searchResults: [],
             data,
             columns,
+            searchType: localStorage.getItem('searchType'),
+            searchQuery: localStorage.getItem('searchQuery'),
         };
     },
     methods: {

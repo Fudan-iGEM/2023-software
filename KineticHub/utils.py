@@ -6,6 +6,9 @@
 @Time : 2023/7/28 4:09
 """
 import re
+from copy import deepcopy
+
+import brendapyrser
 
 
 def extract_substrates(reaction_dict_list: list[dict]):
@@ -57,3 +60,82 @@ def extract_ec_annotation(ec_number: str):
         return ec_number[ec_index + len(ec_numbers[0]):].strip()
     else:
         return None
+
+
+def parse_kcat(reaction: brendapyrser.Reaction):
+    """
+    :param reaction: brendapyrser.parser.Reaction
+    :return: dict with pure meta for kcat
+    """
+    res = reaction.Kcatvalues
+    reference = reaction.references
+    species = reaction.getSpeciesDict()
+    species_pattern = r'#(.*?)#'
+    reference_pattern = r'<(.*?)>'
+    for substrates in reaction.Kcatvalues.keys():
+        value_list = reaction.Kcatvalues[substrates]
+        value_list_res = deepcopy(value_list)
+        for i, value in enumerate(value_list):
+            value_res = deepcopy(value)
+            if value['meta']:
+                reference_id_sub = re.findall(reference_pattern, value['meta'])
+                species_id_sub = re.findall(species_pattern, value['meta'])
+                meta = re.sub(species_pattern, '', value['meta'])
+                meta = re.sub(reference_pattern, '', meta)[1:-1]
+                value_res['meta'] = meta
+                species_name_sub = set([species.get(j).get('name') for j in species_id_sub if species.get(j)])
+                reference_name_sub = set([reference.get(j) for j in reference_id_sub])
+                value_res['species'] = list(species_name_sub.union(set(value['species'])))
+                value_res['refs'] = list(reference_name_sub.union(set(value['refs'])))
+                value_list_res[i] = value_res
+        res[substrates] = value_list_res
+    return res
+
+
+def parse_km(reaction: brendapyrser.Reaction):
+    """
+    :param reaction: brendapyrser.parser.Reaction
+    :return: dict with pure meta for km
+    """
+    res = reaction.KMvalues
+    reference = reaction.references
+    species = reaction.getSpeciesDict()
+    species_pattern = r'#(.*?)#'
+    reference_pattern = r'<(.*?)>'
+    for substrates in reaction.Kcatvalues.keys():
+        value_list = reaction.Kcatvalues[substrates]
+        value_list_res = deepcopy(value_list)
+        for i, value in enumerate(value_list):
+            value_res = deepcopy(value)
+            if value['meta']:
+                reference_id_sub = re.findall(reference_pattern, value['meta'])
+                species_id_sub = re.findall(species_pattern, value['meta'])
+                meta = re.sub(species_pattern, '', value['meta'])
+                meta = re.sub(reference_pattern, '', meta)[1:-1]
+                value_res['meta'] = meta
+                species_name_sub = set([species.get(j).get('name') for j in species_id_sub if species.get(j)])
+                reference_name_sub = set([reference.get(j) for j in reference_id_sub])
+                value_res['species'] = list(species_name_sub.union(set(value['species'])))
+                value_res['refs'] = list(reference_name_sub.union(set(value['refs'])))
+                value_list_res[i] = value_res
+        res[substrates] = value_list_res
+    return res
+
+
+def parse_species(reaction: brendapyrser.Reaction):
+    """
+    :param reaction: brendapyrser.parser.Reaction
+    :return: dict with full references
+    """
+    species_dict = reaction.getSpeciesDict()
+    reference = reaction.references
+    res = deepcopy(species_dict)
+    for key in species_dict.keys():
+        res_refs = []
+        for i in species_dict.get(key).get('refs'):
+            try:
+                res_refs.append(reference[i])
+            except KeyError as e:
+                pass
+        res[key]['refs'] = res_refs
+    return res
