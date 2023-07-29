@@ -15,21 +15,10 @@ module.exports = {
         filename: 'index.html',
         // when using title option,
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-        title: 'test',
+        title: 'pRAPer',
         // chunks to include on this pages, by default includes
         // extracted common chunks and vendor chunks.
         //chunks: ['chunk-vendors', 'chunk-common', 'index']
-      },
-      login: {
-        // entry for the pages
-        entry: 'src/views/login/login.js',
-        // the source template
-        template: 'src/views/login/login.html',
-        // output as dist/index.html
-        filename: 'login.html',
-        // when using title option,
-        // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-        title: 'Login',
       },
       home: {
         // entry for the pages
@@ -40,7 +29,40 @@ module.exports = {
         filename: 'home.html',
         // when using title option,
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-        title: 'Home',
+        title: 'pRAPer | Home',
+      },
+      search: {
+        // entry for the pages
+        entry: 'src/views/search/search.js',
+        // the source template
+        template: 'src/views/search/search.html',
+        // output as dist/index.html
+        filename: 'search.html',
+        // when using title option,
+        // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'pRAPer | Search',
+      },
+      reaction: {
+        // entry for the pages
+        entry: 'src/views/reaction/reaction.js',
+        // the source template
+        template: 'src/views/reaction/reaction.html',
+        // output as dist/index.html
+        filename: 'reaction.html',
+        // when using title option,
+        // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'pRAPer | Reactions',
+      },
+      addEnzyme: {
+        // entry for the pages
+        entry: 'src/views/addEnzyme/addEnzyme.js',
+        // the source template
+        template: 'src/views/addEnzyme/addEnzyme.html',
+        // output as dist/index.html
+        filename: 'addEnzyme.html',
+        // when using title option,
+        // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'pRAPer | Add Enzyme',
       },
     },
   css:{
@@ -50,7 +72,8 @@ module.exports = {
           javascriptEnabled: true,
           modifyVars: {
             //在此处设置，也可以设置直角、边框色、字体大小等
-            'primary-color': '#68BDA8',
+            'primary-color': '#e37654',
+            'pagination-font-family': 'Barlow'
           }
         }
       }

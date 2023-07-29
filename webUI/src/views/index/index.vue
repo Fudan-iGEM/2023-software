@@ -3,16 +3,13 @@
     <div class="home">
         <vue-typed-js
           class="title"
-          :strings="['rbs','igem']"
+          :strings="['pRAPer']"
           :loop="true"
-          :startDelay="300"
-          :typeSpeed="100"
-          :backSpeed="50"
           :showCursor="false"
         >
           <h1 class="typing"></h1>
         </vue-typed-js>
-        <button class="btn-home" @click="toLogin()"><span>Try it now!</span></button>
+        <button class="btn-home" @click="toHome()"><span>Try it now!</span></button>
         <div class="about">
           <span>About:<a href="https://2023.igem.wiki/fudan/software">iGEM 2023, Fudan Team</a></span>
           <br>
@@ -26,8 +23,8 @@
 export default {
   name: "index",
   methods:{
-    toLogin(){
-        window.location.href = '/login';
+    toHome(){
+        window.location.href = '/home';
     }
   },
 }
@@ -39,11 +36,12 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: rgba(0, 0, 0, .8);
+  color: #e37654;
   user-select: none;
 }
+
 .home{
-  background-color: #fff5f0;
+  background-color: #fff6f0;
   padding: 0;
   height: 100vh;
   display: flex;
@@ -55,7 +53,7 @@ h1 {
   margin-top: 0;
   font-size: 5rem;
   font-weight: 700;
-  background-image: linear-gradient(to right, #9795f0 0%, #fbc8d4 100%);
+  background-image: linear-gradient(to right, #fcc6ae 0%, #6fa5b3 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -66,7 +64,7 @@ h1 {
 .btn-home {
     margin-top: 10rem;
     background-color: #f0ecfc;
-    background-image: linear-gradient(315deg, #9795f0 0%, #fbc8d4 100%);
+    background-image: linear-gradient(45deg, #fcc6ae 0%, #6fa5b3 100%);
     line-height: 42px;
     padding: 0;
     border: none;
@@ -97,7 +95,7 @@ h1 {
     content: "";
     right: 0;
     bottom: 0;
-    background: #fbc8d4;
+    background: #fcc6ae;
     /*box-shadow:  4px 4px 6px 0 rgba(255,255,255,.5),
                 -4px -4px 6px 0 rgba(116, 125, 136, .2),
       inset -4px -4px 6px 0 rgba(255,255,255,.5),
@@ -122,7 +120,7 @@ h1 {
     background: transparent;
 }
 .btn-home span:hover{
-    color: #fbc8d4;
+    color: #fcc6ae;
 }
 .btn-home span:before,
 .btn-home span:after {
@@ -130,7 +128,7 @@ h1 {
     content: "";
     left: 0;
     top: 0;
-    background: #fbc8d4;
+    background: #fcc6ae;
     /*box-shadow:  4px 4px 6px 0 rgba(255,255,255,.5),
                 -4px -4px 6px 0 rgba(116, 125, 136, .2),
       inset -4px -4px 6px 0 rgba(255,255,255,.5),
@@ -160,6 +158,6 @@ h1 {
     font-size: 1rem;
 }
 .about a{
-    color: rgba(0, 0, 0, .8);
+    color: #e37654
 }
 </style>

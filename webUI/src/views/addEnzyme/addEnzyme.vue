@@ -4,7 +4,7 @@
             <div class="logo">
                 <p style="font-size: 40px;text-align: center;overflow: hidden">aaaaaaa</p>
             </div>
-            <a-menu theme="dark" mode="inline">
+            <a-menu theme="dark" mode="inline" :default-selected-keys="['3']">
                 <a-sub-menu key="sub1">
                     <span slot="title"><a-icon type="database" /><span>Step 1: KineticHub</span></span>
                     <a-menu-item key="1" @click="toSearch()">
@@ -43,7 +43,7 @@
                         <p style="font-size: 1rem">You can start building your linear reactions from step 1.</p>
                         <p style="font-size: 1rem">And then run step 2 to build your pRAP system.</p>
                         <p style="font-size: 1rem">You can also promote your own pRAP system design after a DBTL cycle using pRAPer.</p>
-                        <p style="font-size: 1rem;font-weight: 700;">For more tutorials and details, please visit our documentation and our wiki!</p>
+                        <p style="font-size: 1rem"><strong>For more tutorials and details, please visit our documentation and our wiki!</strong></p>
                     </div>
                 </div>
             </a-layout-content>
