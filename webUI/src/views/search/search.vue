@@ -1,40 +1,6 @@
 <template>
     <a-layout id="app" style="min-height: 100vh">
-        <a-layout-sider v-model="collapsed" collapsible width="300">
-            <div class="logo">
-                <p style="font-size: 40px;text-align: center;overflow: hidden">aaaaaaa</p>
-            </div>
-            <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
-                <a-sub-menu key="sub1">
-                    <span slot="title"><a-icon type="database" /><span>Step 1: KineticHub</span></span>
-                    <a-menu-item key="1" @click="toSearch()">
-                        <a-icon type="search" />Search Enzyme
-                    </a-menu-item>
-                    <a-menu-item key="2">
-                        <a-icon type="build" />Build Reactions
-                    </a-menu-item>
-                    <a-menu-item key="3">
-                        <a-icon type="plus-circle" />Add Enzyme
-                    </a-menu-item>
-                </a-sub-menu>
-                <a-menu-item key="4">
-                    <a-icon type="compass" />
-                    <span>Step 2: xxx</span>
-                </a-menu-item>
-                <a-menu-item key="5">
-                    <a-icon type="book" />
-                    <span>Docs</span>
-                </a-menu-item>
-                <a-menu-item key="6" @click="toWiki()">
-                    <a-icon type="info-circle" />
-                    <span>Wiki</span>
-                </a-menu-item>
-                <a-menu-item key="7" @click="toGitlab()">
-                    <a-icon type="gitlab" />
-                    <span>Gitlab</span>
-                </a-menu-item>
-            </a-menu>
-        </a-layout-sider>
+        <sidebar :default-activate="defaultActivate"></sidebar>
         <a-layout>
             <a-layout-content style="margin: 0">
                 <div :style="{ padding: '0', background: '#fff6f0', minHeight: '100%',display:'flex',justifyContent:'center',alignItems:'center' }">
@@ -94,13 +60,17 @@
     </a-layout>
 </template>
 <script>
+import sidebar from "@/components/sidebar.vue";
 export default {
     beforeCreate() {
         this.form = this.$form.createForm(this, { name: 'search' });
     },
+    components:{
+        sidebar
+    },
     data() {
         return {
-            collapsed: false,
+            defaultActivate:"['1']",
         };
     },
     methods:{
