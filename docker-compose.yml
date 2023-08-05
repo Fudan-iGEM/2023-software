@@ -19,5 +19,9 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=123456
       - MYSQL_DATABASE=my_database
+    volumes:
+      - ./KineticHub/data/Reaction_reactions.sql:/docker-entrypoint-initdb.d/Reaction_reactions.sql
+      - ./KineticHub/data/KM_km.sql:/docker-entrypoint-initdb.d/KM_km.sql
+      - ./KineticHub/data/KCat_kcat.sql:/docker-entrypoint-initdb.d/KCat_kcat.sql
     ports:
       - "3306:3306"
