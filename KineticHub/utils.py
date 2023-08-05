@@ -102,8 +102,8 @@ def parse_km(reaction: brendapyrser.Reaction):
     species = reaction.getSpeciesDict()
     species_pattern = r'#(.*?)#'
     reference_pattern = r'<(.*?)>'
-    for substrates in reaction.Kcatvalues.keys():
-        value_list = reaction.Kcatvalues[substrates]
+    for substrates in reaction.KMvalues.keys():
+        value_list = reaction.KMvalues[substrates]
         value_list_res = deepcopy(value_list)
         for i, value in enumerate(value_list):
             value_res = deepcopy(value)
@@ -139,3 +139,14 @@ def parse_species(reaction: brendapyrser.Reaction):
                 pass
         res[key]['refs'] = res_refs
     return res
+
+
+def merge_substrates(substrates_list: list[str], reaction: brendapyrser.parser.Reaction):
+    """
+    :param substrates_list: list contains substrates in Reaction
+    :param reaction: brendapyrser.parser.Reaction
+    :return: list contains both substrates in k_m and k_cat
+    """
+    substrates_km = set(parse_km(reaction).keys())
+    substrates_kcat = set(parse_kcat(reaction).keys())
+    return list(set(substrates_list) | substrates_kcat | substrates_km)
