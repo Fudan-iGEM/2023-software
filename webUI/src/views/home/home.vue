@@ -1,6 +1,6 @@
 <template>
     <a-layout id="app" style="min-height: 100vh">
-        <sidebar></sidebar>
+        <sidebar :default-activate="defaultActivate"></sidebar>
         <a-layout>
             <a-layout-content style="margin: 0">
                 <div :style="{ padding: '0', background: '#fff6f0', minHeight: '100%',display:'flex',justifyContent:'center',alignItems:'center' }">
@@ -27,18 +27,8 @@ export default {
     },
     data() {
         return {
+            defaultActivate:"['1']",
         };
-    },
-    methods:{
-        toSearch(){
-            window.location.href = '/search';
-        },
-        toGitlab(){
-            window.open('https://gitlab.igem.org/2023/software-tools/fudan')
-        },
-        toWiki(){
-            window.open('https://2023.igem.wiki/fudan/software')
-        },
     },
 };
 </script>

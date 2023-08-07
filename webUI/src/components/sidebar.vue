@@ -4,31 +4,39 @@
             <p style="font-size: 40px;text-align: center;overflow: hidden">aaaaaaa</p>
         </div>
         <a-menu theme="dark" mode="inline" :default-selected-keys=defaultActivate>
+            <a-menu-item key="1" @click="toHome()">
+                <a-icon type="home" />
+                <span>Home</span>
+            </a-menu-item>
             <a-sub-menu key="sub1">
                 <span slot="title"><a-icon type="database" /><span>Step 1: KineticHub</span></span>
-                <a-menu-item key="1" @click="toSearch()">
+                <a-menu-item key="2" @click="toSearch()">
                     <a-icon type="search" />Search Enzyme
                 </a-menu-item>
-                <a-menu-item key="2">
+                <a-menu-item key="3">
                     <a-icon type="build" />Build Reactions
                 </a-menu-item>
-                <a-menu-item key="3" @click="toAddEnzyme()">
+                <a-menu-item key="4" @click="toAddEnzyme()">
                     <a-icon type="plus-circle" />Add Enzyme
                 </a-menu-item>
             </a-sub-menu>
-            <a-menu-item key="4">
-                <a-icon type="compass" />
-                <span>Step 2: xxx</span>
-            </a-menu-item>
             <a-menu-item key="5">
+                <a-icon type="compass" />
+                <span>Step 2: RBS Predictor</span>
+            </a-menu-item>
+            <a-menu-item key="6">
                 <a-icon type="book" />
                 <span>Docs</span>
             </a-menu-item>
-            <a-menu-item key="6" @click="toWiki()">
+            <a-menu-item key="7" @click="toWiki()">
                 <a-icon type="info-circle" />
                 <span>Wiki</span>
             </a-menu-item>
-            <a-menu-item key="7" @click="toGitlab()">
+            <a-menu-item key="8" @click="toComment()">
+                <a-icon type="edit" />
+                <span>Leave a comment</span>
+            </a-menu-item>
+            <a-menu-item key="9" @click="toGitlab()">
                 <a-icon type="gitlab" />
                 <span>Gitlab</span>
             </a-menu-item>
@@ -44,6 +52,9 @@ export default {
     },
     props:['defaultActivate'],
     methods:{
+        toHome(){
+            window.location.href = '/home';
+        },
         toSearch(){
             window.location.href = '/search';
         },
@@ -56,6 +67,9 @@ export default {
         toWiki(){
             window.open('https://2023.igem.wiki/fudan/software')
         },
+        toComment(){
+            window.location.href = '/comment';
+        }
     },
 };
 </script>

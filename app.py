@@ -9,6 +9,10 @@ from flask import Flask, render_template, request, jsonify
 from flask_compress import Compress
 from os import path
 
+import config
+from KineticHub.db_api import search_reaction
+
+db_config = config.db_config
 template_folder = path.abspath('webUI/template')
 static_folder = path.abspath('webUI/static')
 app = Flask(__name__, template_folder=template_folder, static_folder=static_folder, static_url_path='')
@@ -29,9 +33,20 @@ def home():
 def search():
     return render_template('search.html')
 
+
 @app.route('/reaction')
 def reaction():
     return render_template('reaction.html')
+
+
+@app.route('/comment')
+def comment():
+    return render_template('comment.html')
+
+
+@app.route('/addEnzyme')
+def add_enzyme():
+    return render_template('addEnzyme.html')
 
 
 @app.route('/api/search/reaction', methods=['POST'])
@@ -41,7 +56,7 @@ def handle_search():
     search_type = form_data.get('searchType')
     if not query or not search_type:
         return jsonify({"message": "Missing query or type"}), 400
-    return jsonify([{'1':1},{'2':22}]), 200
+    return search_reaction(db_config, query, search_type)
 
 
 if __name__ == '__main__':

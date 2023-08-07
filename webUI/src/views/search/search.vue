@@ -41,10 +41,10 @@
                                     <a-radio-button value="type">
                                         Type
                                     </a-radio-button>
-                                    <a-radio-button value="substrate">
+                                    <a-radio-button value="substrates">
                                         Substrate
                                     </a-radio-button>
-                                    <a-radio-button value="product">
+                                    <a-radio-button value="products">
                                         Product
                                     </a-radio-button>
                                 </a-radio-group>
@@ -70,19 +70,10 @@ export default {
     },
     data() {
         return {
-            defaultActivate:"['1']",
+            defaultActivate:"['2']",
         };
     },
     methods:{
-        toSearch(){
-            window.location.href = '/search';
-        },
-        toGitlab(){
-            window.open('https://gitlab.igem.org/2023/software-tools/fudan')
-        },
-        toWiki(){
-            window.open('https://2023.igem.wiki/fudan/software')
-        },
         async handleSubmit(e) {
             e.preventDefault();
             this.form.validateFields(async (err, values) => {

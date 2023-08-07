@@ -11,7 +11,7 @@ services:
       - MYSQL_HOST=mysql-db
       - MYSQL_USER=root
       - MYSQL_PASSWORD=123456
-      - MYSQL_DB=my_database
+      - MYSQL_DB=pRAPer
   mysql-db:
     image: mysql:5.7
     command: --default-authentication-plugin=mysql_native_password

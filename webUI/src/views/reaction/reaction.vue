@@ -43,10 +43,10 @@
                                     <a-radio-button value="type">
                                         Type
                                     </a-radio-button>
-                                    <a-radio-button value="substrate">
+                                    <a-radio-button value="substrates">
                                         Substrate
                                     </a-radio-button>
-                                    <a-radio-button value="product">
+                                    <a-radio-button value="products">
                                         Product
                                     </a-radio-button>
                                 </a-radio-group>
@@ -58,10 +58,9 @@
                     :data-source="data"
                     :scroll="{ x: 1500, y: 600 }"
                     style="width: 95%"
-                    bordered
                 >
                     <p slot="title" style="font-weight: 700;font-size: 1rem">
-                        Your Search result of {{searchQuery}} on {{searchType}}:
+                        Your Search result of {{searchQuery}} on {{typeDict[searchType]}}:
                     </p>
                     <a slot="action">action</a>
                 </a-table>
@@ -77,36 +76,20 @@
 import axios from 'axios';
 import sidebar from "@/components/sidebar.vue";
 const columns = [
-    { title: 'Full Name', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
-    { title: 'Age', width: 100, dataIndex: 'age', key: 'age', fixed: 'left' },
-    { title: 'Column 1', dataIndex: 'long', key: '1', width: 150, ellipsis: true, },
-    { title: 'Column 2', dataIndex: 'address', key: '2', width: 150 },
-    { title: 'Column 3', dataIndex: 'address', key: '3', width: 150 },
-    { title: 'Column 4', dataIndex: 'address', key: '4', width: 150 },
-    { title: 'Column 5', dataIndex: 'address', key: '5', width: 150 },
-    { title: 'Column 6', dataIndex: 'address', key: '6', width: 150 },
-    { title: 'Column 7', dataIndex: 'address', key: '7', width: 150 },
-    { title: 'Column 7', dataIndex: 'address', key: '8', width: 150 },
-    { title: 'Column 7', dataIndex: 'address', key: '9', width: 150 },
+    { title: 'EC number', width: 100, dataIndex: 'ec_number', key: 'ec_number', fixed: 'left' },
+    { title: 'EC annotation', width: 200, dataIndex: 'ec_annotation', key: 'ec_annotation', fixed: 'left' },
+    { title: 'Name', dataIndex: 'name', key: 'name', width: 250},
+    { title: 'Systematic name', dataIndex: 'systematic_name', key: 'systematic_name', width: 250 },
+    { title: 'Type', dataIndex: 'type', key: 'type', width: 200 },
+    { title: 'Formula', dataIndex: 'str', key: 'str', width: 300 },
     {
         title: 'Action',
         key: 'operation',
         fixed: 'right',
-        width: 100,
         scopedSlots: { customRender: 'action' },
     },
 ];
-
-const data = [];
-for (let i = 0; i < 100; i++) {
-    data.push({
-        key: i,
-        name: `Edrward ${i}`,
-        age: 32,
-        address: `London Park no. ${i}`,
-        long:'London Park no. ${i}' * i,
-    });
-}
+const data = []
 export default {
     beforeCreate() {
         this.form = this.$form.createForm(this, { name: 'search' });
@@ -121,7 +104,7 @@ export default {
             'searchType': searchType,
             'searchQuery':searchQuery})
             .then(response => {
-                console.log(response.data);})
+                this.data = response.data})
             .catch(error => {
                 console.error(error);
             });
@@ -131,24 +114,22 @@ export default {
     },
     data() {
         return {
-            defaultActivate: "['1']",
+            defaultActivate: "['2']",
             searchResults: [],
             data,
             columns,
             searchType: localStorage.getItem('searchType'),
             searchQuery: localStorage.getItem('searchQuery'),
+            typeDict:{
+                'ec_number': 'EC number',
+                'name': 'Name',
+                'type': 'Type',
+                'substrates': 'Substrate',
+                'products': 'Products'
+            },
         };
     },
     methods: {
-        toSearch() {
-            window.location.href = '/search';
-        },
-        toGitlab() {
-            window.open('https://gitlab.igem.org/2023/software-tools/fudan')
-        },
-        toWiki() {
-            window.open('https://2023.igem.wiki/fudan/software')
-        },
         async handleSubmit(e) {
             e.preventDefault();
             this.form.validateFields(async (err, values) => {

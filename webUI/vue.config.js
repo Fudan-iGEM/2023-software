@@ -64,6 +64,17 @@ module.exports = {
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
         title: 'pRAPer | Add Enzyme',
       },
+      comment: {
+        // entry for the pages
+        entry: 'src/views/comment/comment.js',
+        // the source template
+        template: 'src/views/comment/comment.html',
+        // output as dist/index.html
+        filename: 'comment.html',
+        // when using title option,
+        // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'pRAPer | Comment',
+      },
     },
   css:{
     loaderOptions:{

@@ -3,14 +3,10 @@
         <sidebar :default-activate="defaultActivate"></sidebar>
         <a-layout>
             <a-layout-content style="margin: 0">
-                <div :style="{ padding: '0', background: '#fff6f0', minHeight: '100%',display:'flex',justifyContent:'center',alignItems:'center' }">
-                    <div style="text-align: center;height: 100%">
-                        <p style="font-size: 3rem;font-weight: 700;">Welcome to pRAPer!</p>
-                        <p style="font-size: 1rem">You can start building your linear reactions from step 1.</p>
-                        <p style="font-size: 1rem">And then run step 2 to build your pRAP system.</p>
-                        <p style="font-size: 1rem">You can also promote your own pRAP system design after a DBTL cycle using pRAPer.</p>
-                        <p style="font-size: 1rem"><strong>For more tutorials and details, please visit our documentation and our wiki!</strong></p>
-                    </div>
+                <div :style="{ padding: '0', background: '#fff6f0', minHeight: '100%'}">
+                        <section class='comments' aria-labelledby="comment">
+                            <Disqus />
+                        </section>
                 </div>
             </a-layout-content>
             <a-layout-footer style="text-align: center;padding-top: 12px;padding-bottom: 12px">
@@ -20,17 +16,15 @@
     </a-layout>
 </template>
 <script>
-import sidebar from "@/components/sidebar.vue";
+import sidebar from '@/components/sidebar.vue'
 export default {
     components:{
         sidebar
     },
     data() {
         return {
-            defaultActivate:"['4']",
+            defaultActivate:"['8']",
         };
-    },
-    methods:{
     },
 };
 </script>
@@ -46,6 +40,9 @@ export default {
     height: 50px;
     background: rgba(255, 255, 255, 0.2);
     margin: 16px;
+}
+.comments {
+    padding-top: 100px;
 }
 ::-webkit-scrollbar{
     width: 5px;
