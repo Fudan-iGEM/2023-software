@@ -34,14 +34,27 @@
 </template>
 <script>
 const columns = [
-    { title: 'KineticHub ID', width: 200, dataIndex: 'database_id', key: 'database_id', fixed: 'left' },
+    { title: 'KineticHub ID',
+        width: 200,
+        dataIndex: 'database_id',
+        key: 'database_id',
+        fixed: 'left',
+        sorter: (a, b) => a.database_id - b.database_id },
     { title: 'Kcat', width: 100, dataIndex: 'kcat', key: 'kcat', fixed: 'left', sorter: (a, b) => a.kcat - b.kcat },
-    { title: 'Species', dataIndex: 'species', key: 'species', width: 200, scopedSlots: { customRender: 'species' }},
+    { title: 'Species',
+        dataIndex: 'species',
+        key: 'species',
+        width: 200,
+        scopedSlots: {
+          customRender: 'species' },
+        sorter: (a, b) => a.species.charCodeAt(2) - b.species.charCodeAt(2)
+    },
     { title: 'Annotation', dataIndex: 'meta', key: 'meta', width: 150 },
-    { title: 'References', dataIndex: 'refs', key: 'refs', width: 200, scopedSlots: { customRender: 'refs' } },
-    { title: 'Substrate', dataIndex: 'substrate', key: 'substrate', width: 200,},
+    { title: 'References', dataIndex: 'refs', key: 'refs', width: 300, scopedSlots: { customRender: 'refs' } },
+    { title: 'Substrate', dataIndex: 'substrate', key: 'substrate', width: 100,
+        sorter: (a, b) => a.substrate.charCodeAt(2) - b.substrate.charCodeAt(2)},
     {
-        title: 'Action',
+        title: 'Add',
         key: 'operation',
         fixed: 'right',
         scopedSlots: { customRender: 'action' },

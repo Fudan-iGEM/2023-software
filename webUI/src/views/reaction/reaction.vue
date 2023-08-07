@@ -80,12 +80,12 @@ import kcat from "@/components/kcat.vue";
 const columns = [
     { title: 'EC number', width: 100, dataIndex: 'ec_number', key: 'ec_number', fixed: 'left' },
     { title: 'EC annotation', width: 200, dataIndex: 'ec_annotation', key: 'ec_annotation', fixed: 'left' },
-    { title: 'Name', dataIndex: 'name', key: 'name', width: 250},
+    { title: 'Name', dataIndex: 'name', key: 'name', width: 250, sorter: (a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0)},
     { title: 'Systematic name', dataIndex: 'systematic_name', key: 'systematic_name', width: 250 },
     { title: 'Type', dataIndex: 'type', key: 'type', width: 200 },
     { title: 'Formula', dataIndex: 'str', key: 'str', width: 300 },
     {
-        title: 'Action',
+        title: 'View more',
         key: 'operation',
         fixed: 'right',
         scopedSlots: { customRender: 'action' },
@@ -154,8 +154,7 @@ export default {
                 .then(response => {
                     this.drawerVisible = true;
                     this.drawerNumber = ec_number;
-                    this.drawerData = response.data;
-                    console.log(response.data)})
+                    this.drawerData = response.data;})
                 .catch(error => {
                     console.error(error);
                     this.$message.error(error.message);
