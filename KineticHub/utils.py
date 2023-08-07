@@ -7,11 +7,12 @@
 """
 import re
 from copy import deepcopy
+from typing import Any
 
-import brendapyrser
+import brendapyrsers
 
 
-def extract_substrates(reaction_dict_list: list[dict]):
+def extract_substrates(reaction_dict_list: list[dict]) -> list[Any]:
     """
     :param reaction_dict_list: the output of substratesAndProducts method
     :return: list contains all possible substrates
@@ -23,7 +24,7 @@ def extract_substrates(reaction_dict_list: list[dict]):
     return list(set(res))
 
 
-def extract_products(reaction_dict_list: list[dict]):
+def extract_products(reaction_dict_list: list[dict]) -> list[Any]:
     """
     :param reaction_dict_list: the output of substratesAndProducts method
     :return: list contains all possible products
@@ -35,7 +36,7 @@ def extract_products(reaction_dict_list: list[dict]):
     return list(set(res))
 
 
-def extract_just_ec_number(ec_number: str):
+def extract_just_ec_number(ec_number: str) -> Any | None:
     """
     :param ec_number: the output of ec_number method
     :return: just ec_number like 2.7.1.69
@@ -48,7 +49,7 @@ def extract_just_ec_number(ec_number: str):
         return None
 
 
-def extract_ec_annotation(ec_number: str):
+def extract_ec_annotation(ec_number: str) -> Any | None:
     """
     :param ec_number: the output of ec_number method
     :return: the annotation of the ec_number like (deleted, reaction covered by EC 1.1.1.264)
@@ -62,7 +63,7 @@ def extract_ec_annotation(ec_number: str):
         return None
 
 
-def parse_kcat(reaction: brendapyrser.Reaction):
+def parse_kcat(reaction: brendapyrser.Reaction) -> dict:
     """
     :param reaction: brendapyrser.parser.Reaction
     :return: dict with pure meta for kcat
@@ -92,7 +93,7 @@ def parse_kcat(reaction: brendapyrser.Reaction):
     return res
 
 
-def parse_km(reaction: brendapyrser.Reaction):
+def parse_km(reaction: brendapyrser.Reaction) -> dict:
     """
     :param reaction: brendapyrser.parser.Reaction
     :return: dict with pure meta for km
@@ -122,7 +123,7 @@ def parse_km(reaction: brendapyrser.Reaction):
     return res
 
 
-def parse_species(reaction: brendapyrser.Reaction):
+def parse_species(reaction: brendapyrser.Reaction) -> dict:
     """
     :param reaction: brendapyrser.parser.Reaction
     :return: dict with full references
@@ -141,7 +142,7 @@ def parse_species(reaction: brendapyrser.Reaction):
     return res
 
 
-def merge_substrates(substrates_list: list[str], reaction: brendapyrser.parser.Reaction):
+def merge_substrates(substrates_list: list[str], reaction: brendapyrser.parser.Reaction) -> list[set]:
     """
     :param substrates_list: list contains substrates in Reaction
     :param reaction: brendapyrser.parser.Reaction

@@ -5,11 +5,14 @@
 @Author : Zhiyue Chen
 @Time : 2023/8/6 21:49
 """
+from typing import Tuple
+
+import flask
 import pymysql
-from flask import jsonify
+from flask import jsonify, Response
 
 
-def convert_reaction_data_to_json(data: tuple):
+def convert_reaction_data_to_json(data: tuple) -> list:
     """
     :param data: tuple from cursor.fetchall()
     :return: list format of data
@@ -27,7 +30,7 @@ def convert_reaction_data_to_json(data: tuple):
     return json_data
 
 
-def search_reaction(db_config: dict, query: str, type: str):
+def search_reaction(db_config: dict, query: str, type: str) -> tuple[Response, int]:
     """
     :param db_config: dict database configuration of mysql
     :param query: the inputted query from the frontend
@@ -36,16 +39,20 @@ def search_reaction(db_config: dict, query: str, type: str):
     """
     try:
         connection = pymysql.connect(**db_config)
-        with connection.cursor() as cursor:
-            cursor.execute("USE pRAPer")
-            search_query = f"SELECT * FROM reactions WHERE {type} LIKE '%{query}%'"
-            cursor.execute(search_query)
-            rows = cursor.fetchall()
-            print(rows)
-            cursor.close()
-            return jsonify(convert_reaction_data_to_json(rows)), 200
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("USE pRAPer")
+                search_query = f"SELECT * FROM reactions WHERE {type} LIKE '%{query}%'"
+                cursor.execute(search_query)
+                rows = cursor.fetchall()
+                print(rows)
+                cursor.close()
+                return jsonify(convert_reaction_data_to_json(rows)), 200
+        except pymysql.Error as e:
+            print(e)
+            return jsonify({"message": str(e)}), 500
+        finally:
+            connection.close()
     except pymysql.Error as e:
-        print(e)
         return jsonify({"message": str(e)}), 500
-    finally:
-        connection.close()
+
