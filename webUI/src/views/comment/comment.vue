@@ -43,6 +43,8 @@ export default {
 }
 .comments {
     padding-top: 100px;
+    padding-left: 50px;
+    padding-right: 50px;
 }
 ::-webkit-scrollbar{
     width: 5px;

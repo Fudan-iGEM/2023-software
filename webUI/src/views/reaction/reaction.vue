@@ -107,6 +107,7 @@ export default {
                 this.data = response.data})
             .catch(error => {
                 console.error(error);
+                this.$message.error(error.message);
             });
     },
     components:{
