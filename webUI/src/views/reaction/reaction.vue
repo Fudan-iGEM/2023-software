@@ -62,8 +62,9 @@
                     <p slot="title" style="font-weight: 700;font-size: 1rem">
                         Your Search result of {{searchQuery}} on {{typeDict[searchType]}}:
                     </p>
-                    <a slot="action">action</a>
+                    <a slot="action" slot-scope="text, record" @click="viewKcat(record.ec_number)">Get Kcat</a>
                 </a-table>
+                <kcat :ec_number="drawerNumber" :visible="drawerVisible" :data="drawerData" @onClose="handleVisibleChange"></kcat>
             </div>
             </a-layout-content>
             <a-layout-footer style="text-align: center;padding-top: 12px;padding-bottom: 12px">
@@ -75,6 +76,7 @@
 <script>
 import axios from 'axios';
 import sidebar from "@/components/sidebar.vue";
+import kcat from "@/components/kcat.vue";
 const columns = [
     { title: 'EC number', width: 100, dataIndex: 'ec_number', key: 'ec_number', fixed: 'left' },
     { title: 'EC annotation', width: 200, dataIndex: 'ec_annotation', key: 'ec_annotation', fixed: 'left' },
@@ -111,7 +113,8 @@ export default {
             });
     },
     components:{
-        sidebar
+        sidebar,
+        kcat
     },
     data() {
         return {
@@ -128,6 +131,9 @@ export default {
                 'substrates': 'Substrate',
                 'products': 'Products'
             },
+            drawerVisible: false,
+            drawerNumber:'',
+            drawerData: [],
         };
     },
     methods: {
@@ -141,6 +147,22 @@ export default {
                     window.location.href = '/reaction'
                 }
             });
+        },
+        async viewKcat(ec_number){
+            axios.post('/api/search/kcat', {
+                'ecNumber': ec_number})
+                .then(response => {
+                    this.drawerVisible = true;
+                    this.drawerNumber = ec_number;
+                    this.drawerData = response.data;
+                    console.log(response.data)})
+                .catch(error => {
+                    console.error(error);
+                    this.$message.error(error.message);
+                });
+        },
+        handleVisibleChange(newVisible) {
+            this.drawerVisible = newVisible;
         },
     }
 };

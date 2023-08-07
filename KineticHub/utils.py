@@ -9,7 +9,7 @@ import re
 from copy import deepcopy
 from typing import Any
 
-import brendapyrsers
+import brendapyrser
 
 
 def extract_substrates(reaction_dict_list: list[dict]) -> list[Any]:

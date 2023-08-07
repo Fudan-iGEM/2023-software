@@ -10,7 +10,7 @@ from flask_compress import Compress
 from os import path
 
 import config
-from KineticHub.db_api import search_reaction
+from KineticHub.db_api import search_reaction, search_kcat
 
 db_config = config.db_config
 template_folder = path.abspath('webUI/template')
@@ -19,6 +19,7 @@ app = Flask(__name__, template_folder=template_folder, static_folder=static_fold
 Compress(app)
 
 
+# for web pages
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -49,14 +50,24 @@ def add_enzyme():
     return render_template('addEnzyme.html')
 
 
+# for apis
 @app.route('/api/search/reaction', methods=['POST'])
-def handle_search():
+def handle_search_reaction():
     form_data = request.json
     query = form_data.get('searchQuery')
     search_type = form_data.get('searchType')
     if not query or not search_type:
         return jsonify({"message": "Missing query or type"}), 400
     return search_reaction(db_config, query, search_type)
+
+
+@app.route('/api/search/kcat', methods=['POST'])
+def handle_search_kcat():
+    data = request.json
+    ec_number = data.get('ecNumber')
+    if not ec_number:
+        return jsonify({"message": "Missing ec_number"}), 400
+    return search_kcat(db_config, ec_number)
 
 
 if __name__ == '__main__':
