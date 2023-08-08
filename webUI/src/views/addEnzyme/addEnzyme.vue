@@ -4,12 +4,110 @@
         <a-layout>
             <a-layout-content style="margin: 0">
                 <div :style="{ padding: '0', background: '#fff6f0', minHeight: '100%',display:'flex',justifyContent:'center',alignItems:'center' }">
-                    <div style="text-align: center;height: 100%">
-                        <p style="font-size: 3rem;font-weight: 700;">Welcome to pRAPer!</p>
-                        <p style="font-size: 1rem">You can start building your linear reactions from step 1.</p>
-                        <p style="font-size: 1rem">And then run step 2 to build your pRAP system.</p>
-                        <p style="font-size: 1rem">You can also promote your own pRAP system design after a DBTL cycle using pRAPer.</p>
-                        <p style="font-size: 1rem"><strong>For more tutorials and details, please visit our documentation and our wiki!</strong></p>
+                    <div style="text-align: center;height: 100%;width: 50%">
+                        <p style="font-size: 3rem;font-weight: 700;">Add new enzyme record</p>
+                        <a-form :form="form" @submit="handleSubmit" layout='vertical'>
+                            <a-form-item label="EC number" has-feedback>
+                                <a-select
+                                    show-search
+                                    :not-found-content="ec_fetching ? undefined : null"
+                                    :default-active-first-option="false"
+                                    option-filter-prop="children"
+                                    :filter-option="filterOption"
+                                    @search="fetchEC"
+                                    v-decorator="[
+                                      'ec_number',
+                                      {
+                                        rules: [
+                                          {
+                                            required: true,
+                                            message: 'Please input the EC number of the enzyme!',
+                                          },
+                                        ],
+                                      },
+                                    ]"
+                                >
+                                    <a-spin v-if="fetching" slot="notFoundContent" size="small" />
+                                    <a-select-option v-for="d in ec_data" :key="d">
+                                        {{ d }}
+                                    </a-select-option>
+                                </a-select>
+                            </a-form-item>
+                            <a-form-item label="Kcat" has-feedback>
+                                <a-input
+                                    v-decorator="[
+                                      'kcat',
+                                      {
+                                        rules: [
+                                          {
+                                            required: true,
+                                            message: 'Please input the Kcat of the enzyme!',
+                                          },
+                                          {
+                                            validator: isFloat,
+                                          },
+                                        ],
+                                      },
+                                    ]"
+                                />
+                            </a-form-item>
+                            <a-form-item label="Species">
+                                <a-select
+                                    mode="tags"
+                                    :not-found-content="false"
+                                    v-decorator="[
+                                      'species',
+                                      {
+                                        rules: [
+                                          {
+                                            required: true,
+                                            message: 'Please input the species of the enzyme!',
+                                          },
+                                        ],
+                                      },
+                                    ]"
+                                >
+                                </a-select>
+                            </a-form-item>
+                            <a-form-item label="Annotation">
+                                <a-textarea placeholder="Like temperature, pH, etc." :rows="4" />
+                            </a-form-item>
+                            <a-form-item label="Your group name or your email" has-feedback>
+                                <a-input
+                                    v-decorator="[
+                                      'ref',
+                                      {
+                                        rules: [
+                                          {
+                                            required: true,
+                                            message: 'Please input your group name or your email!',
+                                          },
+                                        ],
+                                      },
+                                    ]"
+                                />
+                            </a-form-item>
+                            <a-form-item label="Substrate" has-feedback>
+                                <a-input
+                                    v-decorator="[
+                                      'substrate',
+                                      {
+                                        rules: [
+                                          {
+                                            required: true,
+                                            message: 'Please input the substrate of the enzyme!',
+                                          },
+                                        ],
+                                      },
+                                    ]"
+                                />
+                            </a-form-item>
+                            <a-form-item>
+                                <a-button type="primary" html-type="submit">
+                                    Register to KineticHub
+                                </a-button>
+                            </a-form-item>
+                        </a-form>
                     </div>
                 </div>
             </a-layout-content>
@@ -20,17 +118,62 @@
     </a-layout>
 </template>
 <script>
+import debounce from 'lodash/debounce';
+import axios from 'axios';
 import sidebar from "@/components/sidebar.vue";
 export default {
     components:{
         sidebar
     },
     data() {
+        this.fetchEC = debounce(this.fetchEC, 800);
         return {
-            defaultActivate:"['4']",
+            defaultActivate: ['4'],
+            ec_data: [],
+            ec_fetching: false
         };
     },
+    beforeCreate() {
+        this.form = this.$form.createForm(this, { name: 'register' });
+    },
     methods:{
+        filterOption(input, option) {
+            return (
+                option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            );
+        },
+        isFloat(rule, value, callback){
+            if (value && isNaN(value)) {
+                callback('The Kcat should be a numeric value!');
+            } else {
+                callback();
+            }
+        },
+        handleSubmit(e) {
+            e.preventDefault();
+            this.form.validateFieldsAndScroll((err, values) => {
+                if (!err) {
+                    console.log('Received values of form: ', values);
+                }
+            });
+        },
+        fetchEC(value) {
+            this.ec_fetching = true;
+            if(value){
+                axios.post('/api/addEnzyme/sug/ec_number', {
+                    'ecNumber': value})
+                    .then(response => {
+                        if (response.data) {
+                            console.log(response.data)
+                            this.ec_data = response.data;
+                        }})
+                    .catch(error => {
+                        console.error(error);
+                        this.$message.error(error.message);
+                    });
+            }
+            this.ec_fetching = false;
+        },
     },
 };
 </script>

@@ -10,7 +10,7 @@ from flask_compress import Compress
 from os import path
 
 import config
-from KineticHub.db_api import search_reaction, search_kcat
+from KineticHub.db_api import search_reaction, search_kcat, get_all_ec_numbers
 
 db_config = config.db_config
 template_folder = path.abspath('webUI/template')
@@ -68,6 +68,15 @@ def handle_search_kcat():
     if not ec_number:
         return jsonify({"message": "Missing ec_number"}), 400
     return search_kcat(db_config, ec_number)
+
+
+@app.route('/api/addEnzyme/sug/ec_number', methods=['POST'])
+def handle_sug_ec_number():
+    data = request.json
+    ec_number = data.get('ecNumber')
+    if not ec_number:
+        return jsonify({"message": "Missing ec_number"}), 400
+    return get_all_ec_numbers(db_config, ec_number)
 
 
 if __name__ == '__main__':

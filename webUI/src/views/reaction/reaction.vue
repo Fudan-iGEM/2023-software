@@ -118,7 +118,7 @@ export default {
     },
     data() {
         return {
-            defaultActivate: "['2']",
+            defaultActivate: ['2'],
             searchResults: [],
             data,
             columns,

@@ -23,7 +23,7 @@ export default {
     },
     data() {
         return {
-            defaultActivate:"['8']",
+            defaultActivate:['8'],
         };
     },
 };
