@@ -40,7 +40,7 @@ const columns = [
         key: 'database_id',
         fixed: 'left',
         sorter: (a, b) => a.database_id - b.database_id },
-    { title: 'Kcat', width: 100, dataIndex: 'kcat', key: 'kcat', fixed: 'left', sorter: (a, b) => a.kcat - b.kcat },
+    { title: 'Kcat (1/s)', width: 100, dataIndex: 'kcat', key: 'kcat', fixed: 'left', sorter: (a, b) => a.kcat - b.kcat },
     { title: 'Species',
         dataIndex: 'species',
         key: 'species',

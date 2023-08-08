@@ -33,7 +33,7 @@
                                     </a-select-option>
                                 </a-select>
                             </a-form-item>
-                            <a-form-item label="Kcat" has-feedback>
+                            <a-form-item label="Kcat (1/s)" has-feedback>
                                 <a-input
                                     v-decorator="[
                                       'kcat',
@@ -51,7 +51,7 @@
                                     ]"
                                 />
                             </a-form-item>
-                            <a-form-item label="Species">
+                            <a-form-item label="Species" has-feedback>
                                 <a-select
                                     mode="tags"
                                     :not-found-content="false"
