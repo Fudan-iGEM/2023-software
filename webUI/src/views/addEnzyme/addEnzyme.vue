@@ -36,7 +36,7 @@
                             <a-form-item label="Kcat (1/s)" has-feedback>
                                 <a-input
                                     v-decorator="[
-                                      'kcat',
+                                      'k_cat',
                                       {
                                         rules: [
                                           {
@@ -70,12 +70,12 @@
                                 </a-select>
                             </a-form-item>
                             <a-form-item label="Annotation">
-                                <a-textarea placeholder="Like temperature, pH, etc." :rows="4" />
+                                <a-textarea v-decorator= "['meta']" placeholder="Like temperature, pH, etc." :rows="4" />
                             </a-form-item>
-                            <a-form-item label="Your group name or your email" has-feedback>
+                            <a-form-item label="Your references, your group or your email" has-feedback>
                                 <a-input
                                     v-decorator="[
-                                      'ref',
+                                      'refs',
                                       {
                                         rules: [
                                           {
@@ -153,7 +153,18 @@ export default {
             e.preventDefault();
             this.form.validateFieldsAndScroll((err, values) => {
                 if (!err) {
-                    console.log('Received values of form: ', values);
+                    axios.post('/api/addEnzyme', {
+                        values})
+                        .then(response => {
+                            if (response.data) {
+                                console.log(values);
+                                this.$message.success(response.data.message);
+                                this.form.resetFields();
+                            }})
+                        .catch(error => {
+                            console.error(error);
+                            this.$message.error(error.message);
+                        });
                 }
             });
         },
@@ -164,7 +175,6 @@ export default {
                     'ecNumber': value})
                     .then(response => {
                         if (response.data) {
-                            console.log(response.data)
                             this.ec_data = response.data;
                         }})
                     .catch(error => {

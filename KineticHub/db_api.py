@@ -5,6 +5,7 @@
 @Author : Zhiyue Chen
 @Time : 2023/8/6 21:49
 """
+import json
 
 import pymysql
 from flask import jsonify, Response
@@ -111,6 +112,48 @@ def get_all_ec_numbers(db_config: dict, input_ec_number: str) -> tuple[Response,
                 cursor.close()
                 res = [row[0] for row in rows[:5]]
                 return jsonify(res), 200
+        except pymysql.Error as e:
+            return jsonify({"message": str(e)}), 500
+        finally:
+            connection.close()
+    except pymysql.Error as e:
+        return jsonify({"message": str(e)}), 500
+
+
+def add_kcat2mysql(db_config: dict, data: dict) -> tuple[Response, int]:
+    """
+    :param db_config: dict, database configuration of mysql
+    :param data: dict, the input of '/api/addEnzyme'
+    :return: json format response that could be used in api
+    """
+    if data.get('species'):
+        data['species'] = json.dumps(data['species'])
+    if data.get('refs'):
+        data['refs'] = json.dumps([data['refs']])
+    if not data.get('meta'):
+        data['meta'] = None
+    for key in data:
+        if not data[key]:
+            data[key] = None
+    try:
+        connection = pymysql.connect(**db_config)
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("USE pRAPer")
+                insert_query = f"INSERT INTO kcat ({', '.join(data.keys())}) VALUES ({', '.join(['%s'] * len(data))})"
+                cursor.execute(insert_query, tuple(data.values()))
+                if data.get('substrate'):
+                    ec_number = data['ec_number']
+                    search_query = f"SELECT substrates FROM reactions WHERE ec_number = %s"
+                    cursor.execute(search_query, ec_number)
+                    rows = cursor.fetchall()
+                    if rows:
+                        substrates_new = list(set(json.loads(rows[0][0])) | {data.get('substrate')})
+                        update_query = f"UPDATE reactions SET substrates = %s WHERE ec_number = %s"
+                        cursor.execute(update_query, (json.dumps(substrates_new), ec_number))
+                connection.commit()
+                cursor.close()
+                return jsonify({"message": "Your record has been successfully added to pRAPer!"}), 200
         except pymysql.Error as e:
             return jsonify({"message": str(e)}), 500
         finally:

@@ -6,7 +6,7 @@
 @Time : 2023/8/6 21:50
 """
 db_config = {
-    'host': 'mysql-db',
+    'host': 'localhost',
     'user': 'root',
     'password': '123456',
     'charset': 'utf8mb4'

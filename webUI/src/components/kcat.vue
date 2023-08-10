@@ -50,8 +50,8 @@ const columns = [
         sorter: (a, b) => a.species.charCodeAt(2) - b.species.charCodeAt(2)
     },
     { title: 'Annotation', dataIndex: 'meta', key: 'meta', width: 150 },
-    { title: 'References', dataIndex: 'refs', key: 'refs', width: 300, scopedSlots: { customRender: 'refs' } },
-    { title: 'Substrate', dataIndex: 'substrate', key: 'substrate', width: 100,
+    { title: 'References', dataIndex: 'refs', key: 'refs', width: 250, scopedSlots: { customRender: 'refs' } },
+    { title: 'Substrate', dataIndex: 'substrate', key: 'substrate', width: 150,
         sorter: (a, b) => a.substrate.charCodeAt(2) - b.substrate.charCodeAt(2)},
     {
         title: 'Add',
