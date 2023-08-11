@@ -28,7 +28,8 @@
                     {{ ref }}
                   </p>
                 </span>
-                <a slot="action"><a-icon type="plus-circle" /></a>
+                <a slot="action" slot-scope="text, record">
+                    <a-icon type="plus-circle" @click="addKcat(record.database_id)" /></a>
             </a-table>
         </a-drawer>
 </template>
@@ -71,6 +72,30 @@ export default {
         onClose() {
             this.$emit('onClose', false);
         },
+        addKcat(database_id){
+            if (localStorage.getItem('reactions') !== null) {
+                let reactions = JSON.parse(localStorage.getItem('reactions'))
+                if (reactions.some(item => item.ec_number === this.ec_number)){
+                    this.$message.info('You have added this reaction!')
+                }
+                else {
+                    const obj = {}
+                    obj['ec_number'] = this.ec_number;
+                    obj['id'] = database_id
+                    reactions.push(obj);
+                    localStorage.setItem('reactions', JSON.stringify(reactions));
+                    this.$emit('update-reactions', reactions.length);
+                    this.$message.success('Successfully add record ' + database_id.toString())
+                }
+            } else {
+                const obj = {}
+                obj['ec_number'] = this.ec_number;
+                obj['id'] = database_id
+                localStorage.setItem('reactions', JSON.stringify([obj]));
+                this.$emit('update-reactions', 1);
+                this.$message.success('Successfully add record ' + database_id.toString())
+            }
+        }
     },
 };
 </script>

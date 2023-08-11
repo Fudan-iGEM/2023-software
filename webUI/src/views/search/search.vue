@@ -54,7 +54,7 @@
                 </div>
             </a-layout-content>
             <a-layout-footer style="text-align: center;padding-top: 12px;padding-bottom: 12px">
-                pRAPer ©2023 Created by mistyfield
+                RAP ©2023 Created by mistyfield
             </a-layout-footer>
         </a-layout>
     </a-layout>
@@ -80,7 +80,6 @@ export default {
                 if (!err) {
                     localStorage.setItem('searchQuery', values.query);
                     localStorage.setItem('searchType', values.type);
-                    console.log('Received values of form: ', values);
                     window.location.href = '/reaction'
                 }
             });

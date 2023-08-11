@@ -1,7 +1,6 @@
 <template>
     <a-layout-sider v-model="collapsed" collapsible width="300">
         <div class="logo">
-            <p style="font-size: 40px;text-align: center;overflow: hidden">aaaaaaa</p>
         </div>
         <a-menu theme="dark" mode="inline" :default-selected-keys=defaultActivate>
             <a-menu-item key="1" @click="toHome()">
@@ -13,7 +12,7 @@
                 <a-menu-item key="2" @click="toSearch()">
                     <a-icon type="search" />Search Enzyme
                 </a-menu-item>
-                <a-menu-item key="3">
+                <a-menu-item key="3" @click="toBuild()">
                     <a-icon type="build" />Build Reactions
                 </a-menu-item>
                 <a-menu-item key="4" @click="toAddEnzyme()">
@@ -22,7 +21,7 @@
             </a-sub-menu>
             <a-menu-item key="5">
                 <a-icon type="compass" />
-                <span>Step 2: RBS Predictor</span>
+                <span>Step 2: pRAP Builder (In progress)</span>
             </a-menu-item>
             <a-menu-item key="6">
                 <a-icon type="book" />
@@ -62,13 +61,16 @@ export default {
             window.location.href = '/addEnzyme';
         },
         toGitlab(){
-            window.open('https://gitlab.igem.org/2023/software-tools/fudan')
+            window.open('https://gitlab.igem.org/2023/software-tools/fudan');
         },
         toWiki(){
-            window.open('https://2023.igem.wiki/fudan/software')
+            window.open('https://2023.igem.wiki/fudan/software');
         },
         toComment(){
             window.location.href = '/comment';
+        },
+        toBuild() {
+            window.location.href = '/buildReactions';
         }
     },
 };

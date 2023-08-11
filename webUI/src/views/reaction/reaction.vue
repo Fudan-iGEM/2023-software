@@ -6,7 +6,7 @@
                 <div
                 :style="{ padding: '0', background: '#fff6f0', minHeight: '100%',display:'flex',flexDirection:'column',justifyContent:'flex-start',alignItems:'center' }"
                 >
-                    <div style="text-align: center;height: 100%;padding-bottom: 3rem">
+                    <div style="text-align: center;height: 100%;padding-bottom: 1.5rem;display: inline-flex;align-items:center;">
                         <a-form
                             layout="inline"
                             :form="form"
@@ -52,6 +52,7 @@
                                 </a-radio-group>
                             </a-form-item>
                         </a-form>
+                        <a-badge :count="count"><a-icon type="experiment" style="font-size: 20px" @click="toBuild"></a-icon></a-badge>
                 </div>
                 <a-table
                     :columns="columns"
@@ -64,11 +65,11 @@
                     </p>
                     <a slot="action" slot-scope="text, record" @click="viewKcat(record.ec_number)">Get Kcat</a>
                 </a-table>
-                <kcat :ec_number="drawerNumber" :visible="drawerVisible" :data="drawerData" @onClose="handleVisibleChange"></kcat>
+                <kcat :ec_number="drawerNumber" :visible="drawerVisible" :data="drawerData" @onClose="handleVisibleChange" @update-reactions="handleAdd"></kcat>
             </div>
             </a-layout-content>
             <a-layout-footer style="text-align: center;padding-top: 12px;padding-bottom: 12px">
-                pRAPer ©2023 Created by mistyfield
+                RAP ©2023 Created by mistyfield
             </a-layout-footer>
         </a-layout>
     </a-layout>
@@ -99,6 +100,12 @@ export default {
     created() {
         const searchType = localStorage.getItem('searchType');
         const searchQuery = localStorage.getItem('searchQuery');
+        if (localStorage.getItem('reactions') !== null){
+            this.count = JSON.parse(localStorage.getItem('reactions')).length;
+        }
+        else {
+            this.count = 0;
+        }
         if (!searchType || !searchQuery) {
             window.location.href = '/search';
         }
@@ -134,6 +141,7 @@ export default {
             drawerVisible: false,
             drawerNumber:'',
             drawerData: [],
+            count: null,
         };
     },
     methods: {
@@ -163,6 +171,12 @@ export default {
         handleVisibleChange(newVisible) {
             this.drawerVisible = newVisible;
         },
+        toBuild(){
+            window.location.href = '/buildReactions';
+        },
+        handleAdd(data){
+            this.count = data;
+        }
     }
 };
 </script>

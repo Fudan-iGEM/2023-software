@@ -15,7 +15,7 @@ module.exports = {
         filename: 'index.html',
         // when using title option,
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-        title: 'pRAPer',
+        title: 'RAP',
         // chunks to include on this pages, by default includes
         // extracted common chunks and vendor chunks.
         //chunks: ['chunk-vendors', 'chunk-common', 'index']
@@ -29,7 +29,7 @@ module.exports = {
         filename: 'home.html',
         // when using title option,
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-        title: 'pRAPer | Home',
+        title: 'RAP | Home',
       },
       search: {
         // entry for the pages
@@ -40,7 +40,7 @@ module.exports = {
         filename: 'search.html',
         // when using title option,
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-        title: 'pRAPer | Search',
+        title: 'RAP | Search',
       },
       reaction: {
         // entry for the pages
@@ -51,7 +51,7 @@ module.exports = {
         filename: 'reaction.html',
         // when using title option,
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-        title: 'pRAPer | Reactions',
+        title: 'RAP | Reactions',
       },
       addEnzyme: {
         // entry for the pages
@@ -62,7 +62,7 @@ module.exports = {
         filename: 'addEnzyme.html',
         // when using title option,
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-        title: 'pRAPer | Add Enzyme',
+        title: 'RAP | Add Enzyme',
       },
       comment: {
         // entry for the pages
@@ -73,7 +73,18 @@ module.exports = {
         filename: 'comment.html',
         // when using title option,
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-        title: 'pRAPer | Comment',
+        title: 'RAP | Comment',
+      },
+      buildReactions: {
+        // entry for the pages
+        entry: 'src/views/buildReactions/buildReactions.js',
+        // the source template
+        template: 'src/views/buildReactions/buildReactions.html',
+        // output as dist/index.html
+        filename: 'buildReactions.html',
+        // when using title option,
+        // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'RAP | Build Reactions',
       },
     },
   css:{

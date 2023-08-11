@@ -10,7 +10,7 @@
                 </div>
             </a-layout-content>
             <a-layout-footer style="text-align: center;padding-top: 12px;padding-bottom: 12px">
-                pRAPer ©2023 Created by mistyfield
+                RAP ©2023 Created by mistyfield
             </a-layout-footer>
         </a-layout>
     </a-layout>

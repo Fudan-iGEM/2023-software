@@ -11,14 +11,14 @@ services:
       - MYSQL_HOST=mysql-db
       - MYSQL_USER=root
       - MYSQL_PASSWORD=123456
-      - MYSQL_DB=pRAPer
+      - MYSQL_DB=RAP
   mysql-db:
     image: mysql:5.7
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=123456
-      - MYSQL_DATABASE=pRAPer
+      - MYSQL_DATABASE=RAP
     volumes:
       - ./KineticHub/data/Reaction_reactions.sql:/docker-entrypoint-initdb.d/Reaction_reactions.sql
       - ./KineticHub/data/KM_km.sql:/docker-entrypoint-initdb.d/KM_km.sql

@@ -3,9 +3,11 @@
     <div class="home">
         <vue-typed-js
           class="title"
-          :strings="['pRAPer']"
+          :strings="['RAP']"
           :loop="true"
           :showCursor="false"
+          :fadeOut="true"
+          :typeSpeed="200"
         >
           <h1 class="typing"></h1>
         </vue-typed-js>
