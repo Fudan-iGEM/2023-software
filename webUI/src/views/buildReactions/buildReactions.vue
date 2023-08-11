@@ -16,7 +16,7 @@
                                 <a-form-item v-for="(reaction, index) in reactions" :key="index" :label="reaction.ec_number">
                                     <a-input-number
                                         v-decorator="[
-                                          reaction.ec_number,
+                                          reaction.ec_number_new,
                                           { rules: [{ required: true, message: 'Please input stoichiometric values!' }] },
                                         ]"
                                         :min="1"
@@ -63,6 +63,9 @@ export default {
         if (localStorage.getItem('reactions') !== null){
             this.isReactions = true;
             this.reactions = JSON.parse(localStorage.getItem('reactions'));
+            this.reactions.forEach(function(obj) {
+                obj.ec_number_new = obj.ec_number.replace(/\./g, "_");
+            });
             this.getReactionData(this.reactions);
         }
         else {
@@ -96,6 +99,7 @@ export default {
             e.preventDefault();
             this.form.validateFieldsAndScroll((err, values) => {
                 if (!err) {
+                    console.log('Received values of form: ', values);
                     axios.post('/api/buildReactions', {
                         values})
                         .then(response => {
