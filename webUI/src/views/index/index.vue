@@ -1,16 +1,17 @@
 <template>
   <div id="app">
     <div class="home">
-        <vue-typed-js
-          class="title"
-          :strings="['RAP']"
-          :loop="true"
-          :showCursor="false"
-          :fadeOut="true"
-          :typeSpeed="200"
-        >
-          <h1 class="typing"></h1>
-        </vue-typed-js>
+          <img :src="require('@/assets/img/logo.svg')">
+          <vue-typed-js
+            class="title"
+            :strings="['RAP']"
+            :loop="true"
+            :showCursor="false"
+            :fadeOut="true"
+            :typeSpeed="200"
+          >
+            <h1 class="typing"></h1>
+          </vue-typed-js>
         <button class="btn-home" @click="toHome()"><span>Try it now!</span></button>
         <div class="about">
           <span>About:<a href="https://2023.igem.wiki/fudan/software">iGEM 2023, Fudan Team</a></span>
@@ -51,9 +52,14 @@ export default {
   align-items: center;
   justify-content: center;
 }
+.home img{
+    height: 30vh;
+    position: absolute;
+    top: 10vh;
+}
 h1 {
   margin-top: 0;
-  font-size: 5rem;
+  font-size: 10vh;
   font-weight: 700;
   background-image: linear-gradient(to right, #fcc6ae 0%, #6fa5b3 100%);
   background-clip: text;
@@ -62,9 +68,10 @@ h1 {
 }
 .title {
    position: absolute;
+   top: 40vh;
 }
 .btn-home {
-    margin-top: 10rem;
+    margin-top: 10vh;
     background-color: #f0ecfc;
     background-image: linear-gradient(45deg, #fcc6ae 0%, #6fa5b3 100%);
     line-height: 42px;

@@ -36,11 +36,6 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-#app .logo {
-    height: 50px;
-    background: rgba(255, 255, 255, 0.2);
-    margin: 16px;
-}
 .comments {
     padding-top: 100px;
     padding-left: 50px;

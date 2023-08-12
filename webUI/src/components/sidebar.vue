@@ -1,6 +1,7 @@
 <template>
     <a-layout-sider v-model="collapsed" collapsible width="300">
         <div class="logo">
+            <img :src="require('@/assets/img/logo.svg')"><p>RAP</p>
         </div>
         <a-menu theme="dark" mode="inline" :default-selected-keys=defaultActivate>
             <a-menu-item key="1" @click="toHome()">
@@ -77,8 +78,20 @@ export default {
 </script>
 <style scoped>
 .logo {
-    height: 50px;
+    height: 80px;
     background: rgba(255, 255, 255, 0.2);
-    margin: 16px;
+    display: inline-flex;
+    overflow: hidden;
+    align-items: center;
+    width: 100%;
+}
+.logo img{
+    max-height: 100%;
+    padding-right: 10px;
+}
+.logo p{
+    font-size: 60px;
+    color: rgb(255, 246, 240);
+    margin: 0;
 }
 </style>

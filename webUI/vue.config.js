@@ -93,7 +93,6 @@ module.exports = {
         lessOptions: {
           javascriptEnabled: true,
           modifyVars: {
-            //在此处设置，也可以设置直角、边框色、字体大小等
             'primary-color': '#e37654',
             'pagination-font-family': 'Barlow'
           }
@@ -103,10 +102,10 @@ module.exports = {
   },
   chainWebpack: (config) => {
     config.plugin('compressionPlugin').use(new CompressionPlugin({
-      test: /\.(js|css|less)$/, // 匹配文件名
-      threshold: 1024, // 对超过10k的数据压缩
-      deleteOriginalAssets: false, // 不删除源文件
-      minRatio: 0.3, // 压缩比
+      test: /\.(js|css|less)$/,
+      threshold: 1024,
+      deleteOriginalAssets: false,
+      minRatio: 0.3,
     }))
   },
 }

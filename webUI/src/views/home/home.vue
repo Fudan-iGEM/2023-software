@@ -5,6 +5,7 @@
             <a-layout-content style="margin: 0">
                 <div :style="{ padding: '0', background: '#fff6f0', minHeight: '100%',display:'flex',justifyContent:'center',alignItems:'center' }">
                     <div style="text-align: center;height: 100%">
+                        <img :src="require('@/assets/img/logo.svg')" style="height: 20rem">
                         <p style="font-size: 3rem;font-weight: 700;">Welcome to RAP!</p>
                         <p style="font-size: 1rem">You can start building your linear reactions from step 1.</p>
                         <p style="font-size: 1rem">And then run step 2 to build your pRAP system.</p>
@@ -39,11 +40,6 @@ export default {
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
-#app .logo {
-    height: 50px;
-    background: rgba(255, 255, 255, 0.2);
-    margin: 16px;
 }
 ::-webkit-scrollbar{
     width: 5px;
