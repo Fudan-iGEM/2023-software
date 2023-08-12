@@ -12,7 +12,7 @@ from art import tprint
 
 import config
 from KineticHub.db_api import search_reaction, search_kcat, get_all_ec_numbers, add_kcat2mysql, test_connection, \
-    get_reaction_data
+    get_reaction_data, calc_optimal_ratio
 
 db_config = config.db_config
 template_folder = path.abspath('webUI/template')
@@ -61,11 +61,11 @@ def build_reactions():
 @app.route('/api/search/reaction', methods=['POST'])
 def handle_search_reaction():
     form_data = request.json
-    query = form_data.get('searchQuery')
-    search_type = form_data.get('searchType')
-    if not query or not search_type:
+    if not form_data or not form_data.get('searchQuery') or not form_data.get('searchType'):
         app.logger.warning('Missing query or type')
         return jsonify({"message": "Missing query or type"}), 400
+    query = form_data.get('searchQuery')
+    search_type = form_data.get('searchType')
     res = search_reaction(db_config, query, search_type)
     if res[1] != 200:
         app.logger.warning(str(res[0].data.decode('utf-8')))
@@ -75,10 +75,10 @@ def handle_search_reaction():
 @app.route('/api/search/kcat', methods=['POST'])
 def handle_search_kcat():
     data = request.json
-    ec_number = data.get('ecNumber')
-    if not ec_number:
+    if not data or not data.get('ecNumber'):
         app.logger.warning('Missing ec_number')
         return jsonify({"message": "Missing ec_number"}), 400
+    ec_number = data.get('ecNumber')
     res = search_kcat(db_config, ec_number)
     if res[1] != 200:
         app.logger.warning(str(res[0].data.decode('utf-8')))
@@ -88,10 +88,10 @@ def handle_search_kcat():
 @app.route('/api/addEnzyme/sug/ec_number', methods=['POST'])
 def handle_sug_ec_number():
     data = request.json
-    ec_number = data.get('ecNumber')
-    if not ec_number:
+    if not data or not data.get('ecNumber'):
         app.logger.warning('Missing ec_number')
         return jsonify({"message": "Missing ec_number"}), 400
+    ec_number = data.get('ecNumber')
     res = get_all_ec_numbers(db_config, ec_number)
     if res[1] != 200:
         app.logger.warning(str(res[0].data.decode('utf-8')))
@@ -101,10 +101,10 @@ def handle_sug_ec_number():
 @app.route('/api/build/reactionData', methods=['POST'])
 def handle_get_add_reaction_data():
     data = request.json
-    reactions = data.get('reactions')
-    if not reactions:
+    if not data or not data.get('reactions'):
         app.logger.warning('Missing reactions on /buildReactions')
         return jsonify({"'Missing reactions on /buildReactions"}), 400
+    reactions = data.get('reactions')
     res = get_reaction_data(db_config, reactions)
     if res[1] != 200:
         app.logger.warning(str(res[0].data.decode('utf-8')))
@@ -114,13 +114,22 @@ def handle_get_add_reaction_data():
 @app.route('/api/addEnzyme', methods=['POST'])
 def handle_add_enzyme():
     form_data = request.json
-    if not form_data.get('values'):
+    if not form_data or not form_data.get('values'):
         app.logger.warning('Missing data on /addEnzyme')
         return jsonify({"message": 'Missing data on /addEnzyme'}), 400
     res = add_kcat2mysql(db_config, form_data.get('values'))
     if res[1] != 200:
         app.logger.warning(str(res[0].data.decode('utf-8')))
     return res
+
+
+@app.route('/api/buildReactions', methods=['POST'])
+def handle_build_reactions():
+    form_data = request.json
+    if not form_data or not form_data.get('values'):
+        app.logger.warning('Missing data on /addEnzyme')
+        return jsonify({"message": 'Missing data on /addEnzyme'}), 400
+    return calc_optimal_ratio(db_config, form_data.get('values'))
 
 
 @app.route('/api/test/connection')
@@ -131,4 +140,4 @@ def handle_test_connection():
 if __name__ == '__main__':
     print('🍻 Welcome to RAP!')
     tprint('RAP')
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=5001)

@@ -104,8 +104,8 @@ export default {
                         values})
                         .then(response => {
                             if (response.data) {
-                                this.$message.success(response.data.message);
-                                this.form.resetFields();
+                                localStorage.setItem('optimalRatio', response.data);
+                                this.$message.success('Successfully build all reactions, you can run step 2!');
                             }})
                         .catch(error => {
                             console.error(error);

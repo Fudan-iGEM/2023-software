@@ -6,6 +6,7 @@
 @Time : 2023/8/6 21:49
 """
 import json
+import statistics
 from copy import deepcopy
 
 import pymysql
@@ -200,6 +201,44 @@ def get_reaction_data(db_config: dict, reactions: list[dict]) -> tuple[Response,
             connection.close()
     except pymysql.Error as e:
         return jsonify({"message": str(e)}), 500
+
+
+def calc_optimal_ratio(db_config: dict, data: dict[str:int]) -> tuple[Response, int]:
+    """
+    :param db_config: dict, database configuration of mysql
+    :param data: dict[str:float], the key is the KineticHub ID of the reaction and the value is stoichiometric value
+    :return: json format response that could be used in api
+    """
+    # get kcat of the enzyme
+    try:
+        connection = pymysql.connect(**db_config)
+        try:
+            with connection.cursor() as cursor:
+                kcat = {}
+                cursor.execute("USE RAP")
+                for kinetic_id in data.keys():
+                    search_query = f"SELECT k_cat FROM kcat WHERE id = %s"
+                    cursor.execute(search_query, kinetic_id)
+                    rows = cursor.fetchall()
+                    kcat[kinetic_id] = rows[0][0]
+                cursor.close()
+        except pymysql.Error as e:
+            return jsonify({"message": str(e)}), 500
+        finally:
+            connection.close()
+    except pymysql.Error as e:
+        return jsonify({"message": str(e)}), 500
+    # calculate the optimal ratio of the reactions in balance status
+    recip_kcat_mul_sv = {}
+    recip_kcat_mul_sv_list = []
+    for kinetic_id in data.keys():
+        recip_kcat_mul_sv[kinetic_id] = 1 / (data.get(kinetic_id) * kcat[kinetic_id])
+        recip_kcat_mul_sv_list.append(1 / (data.get(kinetic_id) * kcat[kinetic_id]))
+    median_value = statistics.median(recip_kcat_mul_sv_list)
+    optimal_ratio_json_data = []
+    for kinetic_id in data.keys():
+        optimal_ratio_json_data.append({kinetic_id: recip_kcat_mul_sv[kinetic_id] / median_value})
+    return jsonify(optimal_ratio_json_data), 200
 
 
 def test_connection() -> tuple[Response, int]:
