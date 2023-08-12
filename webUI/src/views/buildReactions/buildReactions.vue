@@ -16,7 +16,7 @@
                                 <a-form-item v-for="(reaction, index) in reactions" :key="index" :label="reaction.ec_number">
                                     <a-input-number
                                         v-decorator="[
-                                          reaction.ec_number_new,
+                                          reaction.id,
                                           { rules: [{ required: true, message: 'Please input stoichiometric values!' }] },
                                         ]"
                                         :min="1"
@@ -38,6 +38,9 @@
                                     <p>Substrate: {{reaction.substrate}}</p>
                                     <p>Formula: {{reaction.str}}</p>
                                 </a-tab-pane>
+                                <a-button slot="tabBarExtraContent" @click="clearReactions()">
+                                    Clear all
+                                </a-button>
                             </a-tabs>
                         </div>
                     </div>
@@ -63,9 +66,6 @@ export default {
         if (localStorage.getItem('reactions') !== null){
             this.isReactions = true;
             this.reactions = JSON.parse(localStorage.getItem('reactions'));
-            this.reactions.forEach(function(obj) {
-                obj.ec_number_new = obj.ec_number.replace(/\./g, "_");
-            });
             this.getReactionData(this.reactions);
         }
         else {
@@ -113,6 +113,13 @@ export default {
                         });
                 }
             });
+        },
+        clearReactions(){
+            localStorage.removeItem('reactions');
+            setTimeout(function() {
+                window.location.href = '/search';
+            }, 5000);
+            this.$message.success('All reactions are cleared, will redirect to search page in 5s')
         }
     }
 };
