@@ -94,7 +94,8 @@ module.exports = {
           javascriptEnabled: true,
           modifyVars: {
             'primary-color': '#e37654',
-            'pagination-font-family': 'Barlow'
+            'pagination-font-family': 'Barlow',
+            'font-family': 'HarmonyOS_Sans, Helvetica, Arial, sans-serif'
           }
         }
       }

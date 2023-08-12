@@ -26,6 +26,30 @@ export default {
     components:{
         sidebar
     },
+    created() {
+        this.$notification.open({
+            message: '🤝 Seek for collaboration!',
+            description:
+                'If your team needs to use multiple enzyme coupling to participate in a module, we welcome the opportunity to collaborate with you and offer you help with wet and dry lab, and we are in desire of your feedback and comment on RAP!',
+            icon: <a-icon type="smile" style="color: #e37654" />,
+            btn: h => {
+                return h(
+                    'a-button',
+                    {
+                        props: {
+                            type: 'primary',
+                            size: 'small',
+                        },
+                        on: {
+                            click: () => window.location.href = '/comment',
+                        },
+                    },
+                    'Leave a comment',
+                );
+                },
+            duration:null
+        });
+    },
     data() {
         return {
             defaultActivate:['1'],
