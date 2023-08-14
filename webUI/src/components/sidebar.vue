@@ -24,7 +24,7 @@
                 <a-icon type="compass" />
                 <span>Step 2: pRAP Builder (In progress)</span>
             </a-menu-item>
-            <a-menu-item key="6">
+            <a-menu-item key="6" @click="toDocs()">
                 <a-icon type="book" />
                 <span>Docs</span>
             </a-menu-item>
@@ -72,6 +72,9 @@ export default {
         },
         toBuild() {
             window.location.href = '/buildReactions';
+        },
+        toDocs(){
+            window.open('https://mistyfield.github.io/RAP-Docs/');
         }
     },
 };

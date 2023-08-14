@@ -12,7 +12,11 @@
           >
             <h1 class="typing"></h1>
           </vue-typed-js>
-        <button class="btn-home" @click="toHome()"><span>Try it now!</span></button>
+        <div class="btns">
+          <button class="btn-home" @click="toHome()"><span>Try it now!</span></button>
+          <button class="btn-home" @click="toDocs()"><span>Documentation</span></button>
+          <button class="btn-home" @click="toWiki()"><span>Wiki</span></button>
+        </div>
         <div class="about">
           <span>About:<a href="https://2023.igem.wiki/fudan/software">iGEM 2023, Fudan Team</a></span>
           <br>
@@ -28,6 +32,12 @@ export default {
   methods:{
     toHome(){
         window.location.href = '/home';
+    },
+    toDocs(){
+        window.open('https://mistyfield.github.io/RAP-Docs/');
+    },
+    toWiki(){
+        window.open('https://2023.igem.wiki/fudan/software');
     }
   },
 }
@@ -70,6 +80,10 @@ h1 {
    position: absolute;
    top: 40vh;
 }
+.btns{
+    display: inline-flex;
+    padding-top: 0.5rem;
+}
 .btn-home {
     margin-top: 10vh;
     background-color: #f0ecfc;
@@ -91,6 +105,7 @@ h1 {
     7px 7px 20px 0px rgba(0,0,0,.1),
     4px 4px 5px 0px rgba(0,0,0,.1);
     outline: none;
+    margin-right: 2rem;
 }
 .btn-home span {
     position: relative;
