@@ -6,9 +6,11 @@ code of your team's software tool in this repository, `main` branch. By the **Wi
 [release](https://docs.gitlab.com/ee/user/project/releases/) will be automatically created as the judging artifact of
 this software tool. You will be able to keep working on your software after the Grand Jamboree.
 
+![](https://badgen.net/badge/platform/Linux,macOS,Windows?list=%7C)
 ![](https://badgen.net/static/Python/3.10/blue)
 ![](https://badgen.net/static/vue/2.6+/green)
 ![](https://badgen.net/static/license/CC%20BY%204.0/blue)
+![](https://badgen.net/docker/size/mistyfield/rap/0.1.0-beta)
 
 > If your team does not have any software tool, you can totally ignore this repository. If left unchanged, this
 > repository will be automatically deleted by the end of the season.

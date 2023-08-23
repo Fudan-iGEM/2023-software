@@ -7,7 +7,7 @@
                     <div style="width: 80%;height: 100%">
                         <p style="font-size: 3rem;font-weight: 700;margin-bottom: 1rem">Build your reactions</p>
                         <div class="build-form">
-                            <p>Please input stoichiometric values for your reactions according to EC number</p>
+                            <p>Please input ratio of product to substrate stoichiometry for your reactions according to EC number</p>
                             <a-form
                                 :form="form"
                                 @submit="handleSubmit"
@@ -19,7 +19,7 @@
                                           reaction.id,
                                           { rules: [{ required: true, message: 'Please input stoichiometric values!' }] },
                                         ]"
-                                        :min="1"
+                                        :min="0.01"
                                     />
                                 </a-form-item>
                                 <a-form-item>
@@ -120,7 +120,7 @@ export default {
                 window.location.href = '/search';
             }, 5000);
             this.$message.success('All reactions are cleared, will redirect to search page in 5s')
-        }
+        },
     }
 };
 </script>
