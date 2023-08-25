@@ -12,11 +12,11 @@ from copy import deepcopy
 
 from tqdm import tqdm
 
-from RAPBuilder.rapbuilder import config
-import constant
+from rapbuilder import config
+from rapbuilder import constant
 import math
 
-from rbs_predictor import RBSPredictor
+from rapbuilder.rbs_predictor import RBSPredictor
 
 
 def monte_carlo_rbs(pre_seq, post_seq, TIR_target: float = 0, rbs_init: str = None, dG_target: float = None,

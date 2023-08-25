@@ -11,7 +11,7 @@ from copy import deepcopy
 
 import RNA
 
-import constant
+from rapbuilder import constant
 
 RNA.cvar.uniq_ML = 1
 
