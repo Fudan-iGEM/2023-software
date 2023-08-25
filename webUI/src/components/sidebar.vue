@@ -20,7 +20,7 @@
                     <a-icon type="plus-circle" />Add Enzyme
                 </a-menu-item>
             </a-sub-menu>
-            <a-menu-item key="5">
+            <a-menu-item key="5" @click="toRAPBuilder()">
                 <a-icon type="compass" />
                 <span>Step 2: pRAP Builder (In progress)</span>
             </a-menu-item>
@@ -38,7 +38,7 @@
             </a-menu-item>
             <a-menu-item key="9" @click="toGitlab()">
                 <a-icon type="gitlab" />
-                <span>Gitlab</span>
+                <span>GitLab</span>
             </a-menu-item>
         </a-menu>
     </a-layout-sider>
@@ -75,6 +75,9 @@ export default {
         },
         toDocs(){
             window.open('https://mistyfield.github.io/RAP-Docs/');
+        },
+        toRAPBuilder(){
+            window.location.href = '/RAPBuilder'
         }
     },
 };

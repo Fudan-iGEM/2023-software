@@ -86,6 +86,17 @@ module.exports = {
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
         title: 'RAP | Build Reactions',
       },
+      RAPBuilder: {
+        // entry for the pages
+        entry: 'src/views/rapBuilder/rapBuilder.js',
+        // the source template
+        template: 'src/views/rapBuilder/rapBuilder.html',
+        // output as dist/index.html
+        filename: 'rapBuilder.html',
+        // when using title option,
+        // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'RAP | RAP Builder',
+      },
     },
   css:{
     loaderOptions:{

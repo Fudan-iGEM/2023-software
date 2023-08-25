@@ -105,6 +105,9 @@ export default {
                         .then(response => {
                             if (response.data) {
                                 localStorage.setItem('optimalRatio', response.data);
+                                setTimeout(function() {
+                                    window.location.href = '/RAPBuilder';
+                                }, 5000);
                                 this.$message.success('Successfully build all reactions, you can run step 2!');
                             }})
                         .catch(error => {
