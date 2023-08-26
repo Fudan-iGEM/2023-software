@@ -17,6 +17,10 @@ RNA.cvar.uniq_ML = 1
 
 
 class CalcError(Exception):
+    """
+    A class contains all errors of RBSPredictor
+    """
+
     def __init__(self, value):
         self.value = value
 
@@ -25,7 +29,13 @@ class CalcError(Exception):
 
 
 class RBSPredictor:
-    def __init__(self, mRNA: str, start_codon_range: list, temperature: float = 37.0, name="Untitled"):
+    def __init__(self, mRNA: str, start_codon_range: list, temperature: float = 37.0, name: str = "Untitled"):
+        """
+        :param mRNA: the sequence of mRNA
+        :param start_codon_range: the position range of the start codon
+        :param temperature: the temperature of the environment
+        :param name: the name of the task
+        """
         self.dangles = 2
         RNA.cvar.uniq_ML = 1
         mRNA = mRNA.upper()
@@ -58,6 +68,9 @@ class RBSPredictor:
         self.start_pos_list = []
 
     def calc_dG(self):
+        """
+        this function calculate the delta_G total
+        """
         for start_pos, codon in self.find_start_codons(self.mRNA):
             if start_pos > constant.cutoff:
                 self.dangles = 0
@@ -88,7 +101,12 @@ class RBSPredictor:
             self.three_state_indicator_list.append(dG_SD_open)
             self.start_pos_list.append(start_pos)
 
-    def find_start_codons(self, sequence):
+    def find_start_codons(self, sequence: str):
+        """
+        find the start codons of the RNA sequence
+        :param sequence: RNA sequence
+        :return: a generator that contains the index and position of all start codons
+        """
         seq_len = len(sequence)
         end = min(self.start_codon_range[1], seq_len - 2)
         begin = min(self.start_codon_range[0], end)
@@ -99,19 +117,32 @@ class RBSPredictor:
             else:
                 pass
 
-    def calc_dG_mRNA(self, start_pos):
+    def calc_dG_mRNA(self, start_pos: int) -> tuple:
+        """
+        calculate the delta_G of the mRNA
+        :param start_pos: the position of the start codon
+        :return: the tuple contains mfe value and the structure of the RNA fold compound
+        """
         mRNA = self.mRNA[max(0, start_pos - constant.cutoff):min(len(self.mRNA), start_pos + constant.cutoff)]
         fc = RNA.fold_compound(mRNA, self.md)
         ss, mfe = fc.mfe()
         structure = {'mRNA': mRNA, 'mfe_res': fc.mfe()}
         return mfe, structure
 
-    def calc_dG_rRNA(self):
+    def calc_dG_rRNA(self) -> float:
+        """
+        calculate the delta_G of the rRNA
+        :return: mfe value
+        """
         fc = RNA.fold_compound(constant.rRNA, self.md)
         _, mfe = fc.mfe()
         return mfe
 
-    def calc_dG_mRNA_rRNA(self, start_pos):
+    def calc_dG_mRNA_rRNA(self, start_pos: int) -> tuple:
+        """
+        :param start_pos: the position of the start codon
+        :return: a tuple contains delta_G withspacing of mRNA:rRNA and its RNA fold structure
+        """
         begin = max(0, start_pos - constant.cutoff)
         mRNA_len = min(len(self.mRNA), start_pos + constant.cutoff)
         start_pos_in_subsequence = min(start_pos, constant.cutoff)
@@ -193,7 +224,12 @@ class RBSPredictor:
         return total_energy_withspacing, structure
 
     @staticmethod
-    def convert_subopt_bracket_to_numbered_pairs(subopt_tuple: tuple):
+    def convert_subopt_bracket_to_numbered_pairs(subopt_tuple: tuple) -> dict:
+        """
+        convert subopt bracket to numbered pairs
+        :param subopt_tuple: return of fc.subopt
+        :return: the numbered pairs format of RNA fold structure
+        """
         res = {'strands': [], 'bp_x': [], 'bp_y': [], 'energy': []}
         for subopt in subopt_tuple:
             bp_x = []
@@ -234,7 +270,13 @@ class RBSPredictor:
         return res
 
     @staticmethod
-    def convert_mfe_bracket_to_numbered_pairs(mfe_res: list, sequence):
+    def convert_mfe_bracket_to_numbered_pairs(mfe_res: list, sequence: str) -> dict:
+        """
+        convert mfe bracket to numbered_pairs
+        :param mfe_res: return of fc.mfe
+        :param sequence: the sequence of mRNA
+        :return: numbered pairs format of RNA fold structure
+        """
         res = {}
         bp_x = []
         strands = []
@@ -278,6 +320,13 @@ class RBSPredictor:
 
     @staticmethod
     def convert_numbered_pairs_to_bracket(strands: list, bp_x: list, bp_y: list) -> str:
+        """
+        convert numbered pairs to bracket
+        :param strands: the list contains strands information of RNA sequence
+        :param bp_x: a list contains base pairing position x
+        :param bp_y: a list contains base pairing position y
+        :return: bracket format of RNA
+        """
         bp_x = [pos - 1 for pos in bp_x]
         bp_y = [pos - 1 for pos in bp_y]
         bracket_notation = []
@@ -296,7 +345,15 @@ class RBSPredictor:
         return ''.join(bracket_notation)
 
     @staticmethod
-    def calc_aligned_spacing(mRNA, start_pos, bp_x, bp_y):
+    def calc_aligned_spacing(mRNA: str, start_pos: int, bp_x: list, bp_y: list) -> int:
+        """
+        this function calculate aligned spacing of the mRNA
+        :param mRNA: mRNA sequence
+        :param start_pos: the position of the start codon
+        :param bp_x: a list contains base pairing position x
+        :param bp_y: a list contains base pairing position y
+        :return: aligned spacing
+        """
         flag = False
         seq_len = len(mRNA) + len(constant.rRNA)
         distance_to_start, farthest_3_prime_rRNA = 0, 0
@@ -318,7 +375,12 @@ class RBSPredictor:
         return aligned_spacing
 
     @staticmethod
-    def calc_dG_spacing(aligned_spacing):
+    def calc_dG_spacing(aligned_spacing: int) -> float:
+        """
+        this function calculates the delta_G of spacing
+        :param aligned_spacing: aligned spacing
+        :return: delta_G of spacing
+        """
         if aligned_spacing < constant.optimal_spacing:
             ds = aligned_spacing - constant.optimal_spacing
             dG_spacing_penalty = constant.dG_spacing_constant_push[0] / (1.0 + math.exp(
@@ -330,7 +392,12 @@ class RBSPredictor:
                 1] * ds + constant.dG_spacing_constant_pull[2]
         return dG_spacing_penalty
 
-    def calc_dG_standby_site(self, structure_old):
+    def calc_dG_standby_site(self, structure_old: dict) -> tuple:
+        """
+        this function calculate the delta_G of the standby site
+        :param structure_old: the old RNA fold structure
+        :return: a tuple contains delta_G of standby site and its RNA fold structure
+        """
         structure = deepcopy(structure_old)
         mRNA = structure["mRNA"]
         bp_x = structure["bp_x"]
@@ -372,7 +439,17 @@ class RBSPredictor:
         structure = {'bp_x': bp_x_after, 'bp_y': bp_y_after}
         return dG_standby_site, structure
 
-    def calc_kinetic_score(self, structure=None, mRNA_in=None, bp_x_in=None, bp_y_in=None):
+    def calc_kinetic_score(self, structure: dict = None, mRNA_in: str = None, bp_x_in: list = None,
+                           bp_y_in: list = None) -> tuple:
+        '''
+        this function claculates kinetic score and min base pairing probability. You can just input structure or input
+        mRNA_in, bp_x_in and bp_y_in.
+        :param structure: the structure of RNA fold
+        :param mRNA_in: the inputted mRNA sequence
+        :param bp_x_in: the inputed list contains base pairing position x
+        :param bp_y_in: the inputed list contains base pairing position y
+        :return: tuple contains kinetic score and min base pairing probability
+        '''
         if structure:
             mRNA = structure["mRNA"]
             mfe_res = structure['mfe_res']
@@ -397,7 +474,13 @@ class RBSPredictor:
             min_bp_prob = 1.0
         return kinetic_score, min_bp_prob
 
-    def calc_dG_SDopen(self, mRNA_structure, mRNA_rRNA_structure):
+    def calc_dG_SDopen(self, mRNA_structure: dict, mRNA_rRNA_structure: dict) -> float:
+        """
+        this function calculates deltaG of opening SD sequence
+        :param mRNA_structure: the RNA fold structure of mRNA
+        :param mRNA_rRNA_structure: the RNA fold structure of mRNA:rRMA
+        :return: deltaG of opening SD sequence
+        """
         mRNA = mRNA_structure['mRNA']
         dG_mRNA = mRNA_structure['mfe_res'][1]
         bp_x_1 = mRNA_rRNA_structure['bp_x']
@@ -420,7 +503,12 @@ class RBSPredictor:
         return ddG_mRNA
 
     @staticmethod
-    def calc_most_5p_mRNA(structure_old):
+    def calc_most_5p_mRNA(structure_old: dict) -> int:
+        """
+        this function calculates the most 5-prime nucleotide of mRNA
+        :param structure_old: the RNA fold structure
+        :return: the position of the most 5-prime nucleotide of mRNA
+        """
         structure = deepcopy(structure_old)
         mRNA = structure["mRNA"]
         bp_x = structure["bp_x"]
@@ -430,7 +518,16 @@ class RBSPredictor:
             if nt_x <= len(mRNA) < nt_y:
                 return nt_x
 
-    def calc_longest_loop_bulge(self, structure: dict, output_start_end=False, in_rbs_only=False, rbs=None):
+    def calc_longest_loop_bulge(self, structure: dict, output_start_end: bool = False, in_rbs_only: bool = False,
+                                rbs: str = None) -> tuple:
+        """
+        this function calclates longest loop bulge
+        :param structure: RNA fold structure
+        :param output_start_end: bool, if it is True, start and end of the loop bulge will be returned
+        :param in_rbs_only: bool, if it is True, only considers RBS
+        :param rbs: the sequence of RBS
+        :return: a tuple contains results
+        """
         mRNA = structure['mRNA']
         mfe_res = structure['mfe_res']
         fold = self.convert_mfe_bracket_to_numbered_pairs(mfe_res, mRNA)

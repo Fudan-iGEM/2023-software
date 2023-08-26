@@ -57,6 +57,11 @@ def build_reactions():
     return render_template('buildReactions.html')
 
 
+@app.route('/RAPBuilder')
+def rap_builder():
+    return render_template('rapBuilder.html')
+
+
 # for apis
 @app.route('/api/search/reaction', methods=['POST'])
 def handle_search_reaction():

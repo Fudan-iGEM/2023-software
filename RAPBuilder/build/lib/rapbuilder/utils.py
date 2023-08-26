@@ -5,6 +5,14 @@
 @Author : Zhiyue Chen
 @Time : 2023/8/24 0:36
 """
+# References
+# 1. Salis, H. (2023). Hsalis/Ribosome-Binding-Site-Calculator-v1.0 [Python].
+# https://github.com/hsalis/Ribosome-Binding-Site-Calculator-v1.0 (Original work published 2009)
+# 2. Salis, H. M. (2011). The ribosome binding site calculator. Methods in Enzymology, 498, 19–42.
+# https://doi.org/10.1016/B978-0-12-385120-8.00002-4
+# 3. Lorenz, R., Bernhart, S. H., Höner zu Siederdissen, C., Tafer, H., Flamm, C., Stadler, P. F., &
+# Hofacker, I. L. (2011). ViennaRNA Package 2.0. Algorithms for Molecular Biology, 6(1), 26.
+# https://doi.org/10.1186/1748-7188-6-26
 import random
 import re
 import sys
@@ -19,8 +27,18 @@ import math
 from rapbuilder.rbs_predictor import RBSPredictor
 
 
-def monte_carlo_rbs(pre_seq, post_seq, TIR_target: float = 0, rbs_init: str = None, dG_target: float = None,
-                    max_iter=10000):
+def monte_carlo_rbs(pre_seq: str, post_seq: str, TIR_target: float = 0, rbs_init: str = None, dG_target: float = None,
+                    max_iter: int = 10000) -> tuple:
+    '''
+    runs the monte carlo algorithm to find proper RBS accoring to the inputs. Just enter one of TIR_target and dG_target
+    :param pre_seq: the pre sequence of the RBS
+    :param post_seq: the post sequence of the RBS, generally CDS
+    :param TIR_target: target translation initial rate
+    :param rbs_init: initial rbs sequence(optional)
+    :param dG_target: target delta_G total
+    :param max_iter: maximum number of iterations
+    :return: a tuple conrains results
+    '''
     if TIR_target:
         dG_target = constant.RT_eff * (constant.logK - math.log(TIR_target))
     tol = 0.25  # kcal/mol
@@ -111,7 +129,14 @@ def monte_carlo_rbs(pre_seq, post_seq, TIR_target: float = 0, rbs_init: str = No
         return dG_total, rbs, estimator, counter
 
 
-def get_initial_rbs(pre_seq, post_seq, dG_target: float):
+def get_initial_rbs(pre_seq: str, post_seq: str, dG_target: float) -> tuple:
+    """
+    generate and select a suitable initial RBS.
+    :param pre_seq: the pre sequence of the RBS
+    :param post_seq: the post sequence of the RBS, generally CDS
+    :param dG_target: target delta_G total
+    :return: tuple contains RBS sequence and its RBSPredictor
+    """
     pre_length = 25
     dG_target_nondim = (dG_target - constant.dG_range_high) / (constant.dG_range_low - constant.dG_range_high)
     if dG_target_nondim < 0.125:
@@ -153,14 +178,24 @@ def get_initial_rbs(pre_seq, post_seq, dG_target: float):
         rbs = generate_random_rbs(False, constant.cutoff, pre_length, p_choose_sd, core_length, max_nonoptimal_spacing)
         rbs = remove_start_codons(rbs)
         estimator = run_rbs_predictor(pre_seq, post_seq, rbs)
-        rbs = move_constrain_helical_loop(pre_seq, rbs, estimator)
-        rbs, estimator = move_lower_kinetic_score(pre_seq, post_seq, rbs, estimator)
+        rbs = remove_constrain_helical_loop(pre_seq, rbs, estimator)
+        rbs, estimator = remove_lower_kinetic_score(pre_seq, post_seq, rbs, estimator)
         dG_total = estimator.dG_total_list[0]
     return rbs, estimator
 
 
-def generate_random_rbs(all_Random=False, max_length: int = 20, pre_length: int = 5, p_chooseSD: float = 0.5,
-                        core_length: int = 6, max_nonoptimal_spacing=5):
+def generate_random_rbs(all_Random: bool = False, max_length: int = 20, pre_length: int = 5, p_chooseSD: float = 0.5,
+                        core_length: int = 6, max_nonoptimal_spacing: int = 5) -> str:
+    """
+    randomized generation of RBS
+    :param all_Random: bool, if randomly generate RBS for each nucleotide
+    :param max_length: the max length of RBS
+    :param pre_length: the pre length of RBS
+    :param p_chooseSD: the probability of selecting a nucleotide sequence in the SD sequence
+    :param core_length: length of the selected nucleotide sequence of the SD sequence in RBS
+    :param max_nonoptimal_spacing: maximum none-optional spacing length
+    :return: RBS sequence
+    """
     rbs = []
     if all_Random:
         for i in range(max_length):
@@ -189,7 +224,12 @@ def generate_random_rbs(all_Random=False, max_length: int = 20, pre_length: int 
     return "".join(rbs)
 
 
-def remove_start_codons(rbs: str):
+def remove_start_codons(rbs: str) -> str:
+    """
+    remove strat codon of RBS
+    :param rbs: RBS sequence
+    :return: the RBS sequence that removes potential start codon
+    """
     regexp_str = "|".join(["ATG", "AUG", "GTG", "GUG", "TTG", "UUG"])
     pattern = re.compile(regexp_str)
     matches = pattern.finditer(rbs.upper())
@@ -205,7 +245,14 @@ def remove_start_codons(rbs: str):
         return remove_start_codons(rbs_new)
 
 
-def move_constrain_helical_loop(pre_seq, rbs: str, estimator):
+def remove_constrain_helical_loop(pre_seq: str, rbs: str, estimator: RBSPredictor) -> str:
+    """
+    remove constrain helical loop of RBS
+    :param pre_seq:the pre sequence of RBS
+    :param rbs:the sequence of RBS
+    :param estimator: RBSPredictor of the mRNA
+    :return: RBS sequence that removes constrain helical loop
+    """
     structure = estimator.mRNA_structure_list[0]
     helical_loop_list, bulge_loop_list, helical_start_ends, bulge_start_ends = estimator.calc_longest_loop_bulge(
         structure, True, True, rbs)
@@ -240,7 +287,15 @@ def dsu_sort(idx, seq):
     return seq
 
 
-def move_lower_kinetic_score(pre_seq, post_seq, rbs: str, estimator):
+def remove_lower_kinetic_score(pre_seq: str, post_seq: str, rbs: str, estimator: RBSPredictor) -> tuple:
+    """
+    remove RBS with lower kinetic score
+    :param pre_seq:the pre sequence of RBS
+    :param post_seq:the post sequence of the RBS, generally CDS
+    :param rbs:RBS sequence
+    :param estimator:RBSPredictor of the mRNA
+    :return:tuple contains new RBS and its RBSPredictor
+    """
     if estimator is None:
         estimator = run_rbs_predictor(pre_seq, post_seq, rbs)
     kinetic_score = estimator.kinetic_score_list[0]
@@ -277,7 +332,14 @@ def move_lower_kinetic_score(pre_seq, post_seq, rbs: str, estimator):
     return rbs, estimator
 
 
-def run_rbs_predictor(pre_seq, post_seq, rbs: str):
+def run_rbs_predictor(pre_seq: str, post_seq: str, rbs: str) -> RBSPredictor:
+    """
+    run RBSPredictor
+    :param pre_seq:the pre sequence of RBS
+    :param post_seq:the post sequence of the RBS, generally CDS
+    :param rbs:RBS sequence
+    :return:RBSPredictor of mRNA
+    """
     start_range = [len(pre_seq) + len(rbs) - 2, len(pre_seq) + len(rbs) + 2]
     mRNA = pre_seq.upper() + rbs.upper() + post_seq.upper()
     estimator = RBSPredictor(mRNA, start_range)
@@ -285,7 +347,12 @@ def run_rbs_predictor(pre_seq, post_seq, rbs: str):
     return estimator
 
 
-def weighted_choice(weighted_moves: list[tuple]):
+def weighted_choice(weighted_moves: list[tuple]) -> str:
+    """
+    choose operation of RBS
+    :param weighted_moves:
+    :return: the type of the operation
+    """
     n = random.uniform(0.0, 1.0)
     item = None
     for item, weight in weighted_moves:
@@ -295,7 +362,12 @@ def weighted_choice(weighted_moves: list[tuple]):
     return item
 
 
-def calc_constraints(estimator):
+def calc_constraints(estimator: RBSPredictor) -> bool:
+    """
+    calculate if the mRNA meets the constraints
+    :param estimator: RBSPredictor of mRNA
+    :return: bool result
+    """
     kinetic_score = estimator.kinetic_score_list[0]
     three_state_indicator = estimator.three_state_indicator_list[0]
     if kinetic_score > config.max_kinetic_score:

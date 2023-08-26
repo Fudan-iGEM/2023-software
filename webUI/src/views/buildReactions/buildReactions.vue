@@ -100,20 +100,25 @@ export default {
             this.form.validateFieldsAndScroll((err, values) => {
                 if (!err) {
                     console.log('Received values of form: ', values);
-                    axios.post('/api/buildReactions', {
-                        values})
-                        .then(response => {
-                            if (response.data) {
-                                localStorage.setItem('optimalRatio', response.data);
-                                setTimeout(function() {
-                                    window.location.href = '/RAPBuilder';
-                                }, 5000);
-                                this.$message.success('Successfully build all reactions, you can run step 2!');
-                            }})
-                        .catch(error => {
-                            console.error(error);
-                            this.$message.error(error.message);
-                        });
+                    if (Object.keys(values).length < 2){
+                        this.$message.warn('At least two reactions need to be added!');
+                    }
+                    else {
+                        axios.post('/api/buildReactions', {
+                            values})
+                            .then(response => {
+                                if (response.data) {
+                                    localStorage.setItem('optimalRatio', JSON.stringify(response.data));
+                                    setTimeout(function() {
+                                        window.location.href = '/RAPBuilder';
+                                    }, 5000);
+                                    this.$message.success('Successfully build all reactions, you can run step 2!');
+                                }})
+                            .catch(error => {
+                                console.error(error);
+                                this.$message.error(error.message);
+                            });
+                    }
                 }
             });
         },

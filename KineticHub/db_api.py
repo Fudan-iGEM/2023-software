@@ -234,7 +234,8 @@ def calc_optimal_ratio(db_config: dict, data: dict[str:int]) -> tuple[Response, 
     for kinetic_id in data.keys():
         recip_kcat_mul_sv[kinetic_id] = 1 / (data.get(kinetic_id) * kcat[kinetic_id])
         recip_kcat_mul_sv_list.append(1 / (data.get(kinetic_id) * kcat[kinetic_id]))
-    median_value = statistics.median(recip_kcat_mul_sv_list)
+    recip_kcat_mul_sv_list.sort()
+    median_value = recip_kcat_mul_sv_list[len(recip_kcat_mul_sv_list) // 2]
     optimal_ratio_json_data = []
     for kinetic_id in data.keys():
         optimal_ratio_json_data.append({kinetic_id: recip_kcat_mul_sv[kinetic_id] / median_value})
