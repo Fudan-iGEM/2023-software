@@ -194,13 +194,13 @@ def get_reaction_data(db_config: dict, reactions: list[dict]) -> tuple[Response,
                     reaction_new['species'] = rows[0][2]
                     json_data.append(reaction_new)
                 cursor.close()
-                return jsonify(json_data), 200
         except pymysql.Error as e:
             return jsonify({"message": str(e)}), 500
         finally:
             connection.close()
     except pymysql.Error as e:
         return jsonify({"message": str(e)}), 500
+    return jsonify(json_data), 200
 
 
 def calc_optimal_ratio(db_config: dict, data: dict[str:int]) -> tuple[Response, int]:
@@ -240,6 +240,36 @@ def calc_optimal_ratio(db_config: dict, data: dict[str:int]) -> tuple[Response, 
     for kinetic_id in data.keys():
         optimal_ratio_json_data.append({kinetic_id: recip_kcat_mul_sv[kinetic_id] / median_value})
     return jsonify(optimal_ratio_json_data), 200
+
+
+def get_reaction_data_from_optimal_ratio(db_config: dict, optimal_ratio: list[dict]) -> tuple[Response, int]:
+    """
+    :param db_config: dict, database configuration of mysql
+    :param optimal_ratio: dict, optimal concentration ratio of the enzyme
+    :return: json format response that could be used in api
+    """
+    try:
+        connection = pymysql.connect(**db_config)
+        try:
+            with connection.cursor() as cursor:
+                json_data = []
+                cursor.execute("USE RAP")
+                for kinetic_id in optimal_ratio:
+                    reaction_data = {}
+                    search_query = f"SELECT ec_number FROM kcat WHERE id = %s"
+                    cursor.execute(search_query, list(kinetic_id.keys())[0])
+                    rows = cursor.fetchall()
+                    reaction_data['ec_number'] = rows[0][0]
+                    reaction_data['id'] = list(kinetic_id.keys())[0]
+                    json_data.append(reaction_data)
+                cursor.close()
+        except pymysql.Error as e:
+            return jsonify({"message": str(e)}), 500
+        finally:
+            connection.close()
+    except pymysql.Error as e:
+        return jsonify({"message": str(e)}), 500
+    return jsonify(json_data), 200
 
 
 def test_connection() -> tuple[Response, int]:

@@ -5,14 +5,17 @@
 @Author : Zhiyue Chen
 @Time : 2023/7/17 1:01
 """
-from flask import Flask, render_template, request, jsonify
+import os.path
+
+from flask import Flask, render_template, request, jsonify, send_file
 from flask_compress import Compress
 from os import path
 from art import tprint
 
 import config
 from KineticHub.db_api import search_reaction, search_kcat, get_all_ec_numbers, add_kcat2mysql, test_connection, \
-    get_reaction_data, calc_optimal_ratio
+    get_reaction_data, calc_optimal_ratio, get_reaction_data_from_optimal_ratio
+from RAPBuilderAPI.utils import build_pRAP_system
 
 db_config = config.db_config
 template_folder = path.abspath('webUI/template')
@@ -108,7 +111,7 @@ def handle_get_add_reaction_data():
     data = request.json
     if not data or not data.get('reactions'):
         app.logger.warning('Missing reactions on /buildReactions')
-        return jsonify({"'Missing reactions on /buildReactions"}), 400
+        return jsonify({"message": 'Missing reactions on /buildReactions'}), 400
     reactions = data.get('reactions')
     res = get_reaction_data(db_config, reactions)
     if res[1] != 200:
@@ -137,9 +140,46 @@ def handle_build_reactions():
     return calc_optimal_ratio(db_config, form_data.get('values'))
 
 
+@app.route('/api/rap/reactionData', methods=['POST'])
+def handle_rap_reactions():
+    data = request.json
+    if not data or not data.get('optimalRatio'):
+        app.logger.warning('Missing reactions on /RAPBuilder')
+        return jsonify({"message": 'Missing reactions on /RAPBuilder'}), 400
+    optimal_ratio = data.get('optimalRatio')
+    res = get_reaction_data_from_optimal_ratio(db_config, optimal_ratio)
+    if res[1] != 200:
+        app.logger.warning(str(res[0].data.decode('utf-8')))
+    return res
+
+
+@app.route('/api/rap/build', methods=['POST'])
+def handle_rap_build():
+    data = request.json
+    if not data or not data.get('formData'):
+        app.logger.warning('Missing sequences on /RAPBuilder')
+        return jsonify({"message": 'Missing sequences on /RAPBuilder'}), 400
+    data_list = data.get('formData')
+    try:
+        res = build_pRAP_system(data_list)
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
+    if res[1] != 200:
+        app.logger.warning(str(res[0].data.decode('utf-8')))
+    return res
+
+
 @app.route('/api/test/connection')
 def handle_test_connection():
     return test_connection()
+
+
+# for file download
+@app.route('/download/<filename>')
+def handle_download(filename):
+    filepath = os.path.join('./results', filename)
+    if os.path.exists(filepath):
+        return send_file(filepath, as_attachment=True)
 
 
 if __name__ == '__main__':

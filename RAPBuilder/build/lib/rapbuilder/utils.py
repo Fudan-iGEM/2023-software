@@ -6,11 +6,14 @@
 @Time : 2023/8/24 0:36
 """
 # References
-# 1. Salis, H. (2023). Hsalis/Ribosome-Binding-Site-Calculator-v1.0 [Python].
+# 1. Liu, Y., Wu, Z., Wu, D., Gao, N., & Lin, J. (2023). Reconstitution of Multi-Protein Complexes through
+# Ribozyme-Assisted Polycistronic Co-Expression. ACS Synthetic Biology, 12(1), 136–143.
+# https://doi.org/10.1021/acssynbio.2c00416
+# 2. Salis, H. (2023). Hsalis/Ribosome-Binding-Site-Calculator-v1.0 [Python].
 # https://github.com/hsalis/Ribosome-Binding-Site-Calculator-v1.0 (Original work published 2009)
-# 2. Salis, H. M. (2011). The ribosome binding site calculator. Methods in Enzymology, 498, 19–42.
+# 3. Salis, H. M. (2011). The ribosome binding site calculator. Methods in Enzymology, 498, 19–42.
 # https://doi.org/10.1016/B978-0-12-385120-8.00002-4
-# 3. Lorenz, R., Bernhart, S. H., Höner zu Siederdissen, C., Tafer, H., Flamm, C., Stadler, P. F., &
+# 4. Lorenz, R., Bernhart, S. H., Höner zu Siederdissen, C., Tafer, H., Flamm, C., Stadler, P. F., &
 # Hofacker, I. L. (2011). ViennaRNA Package 2.0. Algorithms for Molecular Biology, 6(1), 26.
 # https://doi.org/10.1186/1748-7188-6-26
 import random
@@ -29,7 +32,7 @@ from rapbuilder.rbs_predictor import RBSPredictor
 
 def monte_carlo_rbs(pre_seq: str, post_seq: str, TIR_target: float = 0, rbs_init: str = None, dG_target: float = None,
                     max_iter: int = 10000) -> tuple:
-    '''
+    """
     runs the monte carlo algorithm to find proper RBS accoring to the inputs. Just enter one of TIR_target and dG_target
     :param pre_seq: the pre sequence of the RBS
     :param post_seq: the post sequence of the RBS, generally CDS
@@ -38,9 +41,10 @@ def monte_carlo_rbs(pre_seq: str, post_seq: str, TIR_target: float = 0, rbs_init
     :param dG_target: target delta_G total
     :param max_iter: maximum number of iterations
     :return: a tuple conrains results
-    '''
+    """
     if TIR_target:
         dG_target = constant.RT_eff * (constant.logK - math.log(TIR_target))
+    dG_target = min(max(dG_target, constant.dG_range_low), constant.dG_range_high)
     tol = 0.25  # kcal/mol
     annealing_accept_ratios = [0.01, 0.20]  # first is min, second is max
     annealing_min_moves = 50

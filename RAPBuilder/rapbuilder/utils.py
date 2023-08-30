@@ -32,7 +32,7 @@ from rapbuilder.rbs_predictor import RBSPredictor
 
 def monte_carlo_rbs(pre_seq: str, post_seq: str, TIR_target: float = 0, rbs_init: str = None, dG_target: float = None,
                     max_iter: int = 10000) -> tuple:
-    '''
+    """
     runs the monte carlo algorithm to find proper RBS accoring to the inputs. Just enter one of TIR_target and dG_target
     :param pre_seq: the pre sequence of the RBS
     :param post_seq: the post sequence of the RBS, generally CDS
@@ -41,9 +41,10 @@ def monte_carlo_rbs(pre_seq: str, post_seq: str, TIR_target: float = 0, rbs_init
     :param dG_target: target delta_G total
     :param max_iter: maximum number of iterations
     :return: a tuple conrains results
-    '''
+    """
     if TIR_target:
         dG_target = constant.RT_eff * (constant.logK - math.log(TIR_target))
+    dG_target = min(max(dG_target, constant.dG_range_low), constant.dG_range_high)
     tol = 0.25  # kcal/mol
     annealing_accept_ratios = [0.01, 0.20]  # first is min, second is max
     annealing_min_moves = 50

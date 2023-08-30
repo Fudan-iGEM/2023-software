@@ -3,13 +3,42 @@
         <sidebar :default-activate="defaultActivate"></sidebar>
         <a-layout>
             <a-layout-content style="margin: 0">
-                <div :style="{ padding: '0', background: '#fff6f0', minHeight: '100%',display:'flex',justifyContent:'center',alignItems:'center' }">
-                    <div style="text-align: center;height: 100%">
-                        <p style="font-size: 3rem;font-weight: 700;">Welcome to RAP!</p>
-                        <p style="font-size: 1rem">You can start building your linear reactions from step 1.</p>
-                        <p style="font-size: 1rem">And then run step 2 to build your pRAP system.</p>
-                        <p style="font-size: 1rem">You can also promote your own pRAP system design after a DBTL cycle using pRAPer.</p>
-                        <p style="font-size: 1rem;font-weight: 700;">For more tutorials and details, please visit our documentation and our wiki!</p>
+                <div :style="{ padding: '0', background: '#fff6f0', minHeight: '100%',display:'flex',justifyContent:'flex-start',alignItems:'center',flexDirection:'column' }">
+                    <a-steps :current="curStep" size="small" style="width: 80%;margin-top: 2rem">
+                        <a-step title="Input CDS Sequence" />
+                        <a-step title="Running RAP Builder" />
+                        <a-step title="Download GeneBank format pRAP sequence" />
+                    </a-steps>
+                    <a-form :form="form" @submit="handleSubmit" layout='horizontal' style="width: 80%" v-if="curStep===0">
+                        <a-form-item v-for="(reaction, index) in reactionData" :key="index" :label="reaction.ec_number" has-feedback>
+                            <a-textarea
+                                v-decorator="[
+                                      reaction.id,
+                                      {
+                                        rules: [
+                                          {
+                                            required: true,
+                                            message: 'Please input coding sequence!',
+                                          },
+                                        ],
+                                      },
+                                    ]"
+                                :placeholder="'Coding Sequence of EC' + ec_number"
+                                :rows="3"
+                            />
+                        </a-form-item>
+                        <a-form-item>
+                            <a-button type="primary" html-type="submit">
+                                Submit
+                            </a-button>
+                        </a-form-item>
+                    </a-form>
+                    <div v-if="curStep===1">
+                        <a-spin size="large"/>
+                        <h1>It's running now, this may take take a few seconds to a few minutes.</h1>
+                    </div>
+                    <div v-if="curStep===2">
+                        <h1>Your file is in the process of being downloaded, if not, please click <a :href="url">here</a> to download manually</h1>
                     </div>
                 </div>
             </a-layout-content>
@@ -21,15 +50,103 @@
 </template>
 <script>
 import sidebar from "@/components/sidebar.vue";
+import axios from "axios";
 export default {
     components:{
         sidebar
     },
+    beforeCreate() {
+        this.form = this.$form.createForm(this, { name: 'sequences' });
+    },
+    created() {
+        if (localStorage.getItem('reactions') === null){
+            this.$message.warn('There is no reaction added, please add reactions!');
+            setTimeout(function() {
+                window.location.href = '/buildReactions';
+            }, 4500);
+        }
+        if (localStorage.getItem('optimalRatio') !== null){
+            this.optimalRatio = JSON.parse(localStorage.getItem('optimalRatio'));
+            this.getReactionData(this.optimalRatio);
+        }
+        else {
+            this.$message.warn('There is no reaction built, please build reactions!');
+            setTimeout(function() {
+                window.location.href = '/buildReactions';
+            }, 4500);
+        }
+    },
     data() {
         return {
             defaultActivate:['5'],
+            curStep:0,
+            reactionData:null,
+            url:null
         };
     },
+    methods:{
+        async getReactionData(optimalRatio){
+            axios.post('/api/rap/reactionData', {
+                'optimalRatio':optimalRatio})
+                .then(response => {
+                    this.reactionData = response.data})
+                .catch(error => {
+                    console.error(error);
+                    this.$message.error(error.message);
+                });
+        },
+        async handleSubmit(e){
+            e.preventDefault();
+            this.form.validateFieldsAndScroll((err, values) => {
+                if (!err) {
+                    this.curStep = 1;
+                    const formData = [];
+                    const regex = /^[ATCGatcgUu]+$/;
+                    for (let key in values){
+                        if (!regex.test(values[key])){
+                            this.$message.warn('The input sequence must be a valid base sequence!');
+                            return;
+                        }
+                        else {
+                            let reaction={};
+                            reaction['id'] = key;
+                            reaction['sequence'] = values[key].toUpperCase();
+                            for (let i = 0; i < this.optimalRatio.length; i++) {
+                                if (key in this.optimalRatio[i]) {
+                                    reaction['optimalRatio'] = this.optimalRatio[i][key];
+                                    break;
+                                }
+                            }
+                            for (let i = 0; i < this.reactionData.length; i++){
+                                if (this.reactionData[i].id === key){
+                                    reaction['ec_number'] = this.reactionData[i].ec_number;
+                                    break;
+                                }
+                            }
+                            formData.push(reaction);
+                        }
+                    }
+                    axios.post('/api/rap/build', {
+                        formData})
+                        .then(response => {
+                            if (response.data) {
+                                this.$message.success(response.data.message);
+                                this.taskID =  response.data.taskID;
+                                let filename = this.taskID + '.gb';
+                                this.url = '/download/' + filename
+                                console.log(filename);
+                                this.curStep = 2;
+                                window.open(this.url);
+                                this.form.resetFields();
+                            }})
+                        .catch(error => {
+                            console.error(error);
+                            this.$message.error(error.message);
+                        });
+                }
+            });
+        },
+    }
 };
 </script>
 

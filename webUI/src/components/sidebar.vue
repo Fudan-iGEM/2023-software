@@ -22,7 +22,7 @@
             </a-sub-menu>
             <a-menu-item key="5" @click="toRAPBuilder()">
                 <a-icon type="compass" />
-                <span>Step 2: pRAP Builder (In progress)</span>
+                <span>Step 2: pRAP Builder</span>
             </a-menu-item>
             <a-menu-item key="6" @click="toDocs()">
                 <a-icon type="book" />

@@ -5,4 +5,4 @@
 @Author : Zhiyue Chen
 @Time : 2023/8/24 14:18
 """
-from . import rbs_predictor, constant, config, utils
+from . import constant, config, rbs_predictor, utils
