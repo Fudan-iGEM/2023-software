@@ -10,7 +10,7 @@ this software tool. You will be able to keep working on your software after the 
 ![](https://badgen.net/static/Python/3.10/blue)
 ![](https://badgen.net/static/vue/2.6+/green)
 ![](https://badgen.net/static/license/CC%20BY%204.0/blue)
-![](https://badgen.net/docker/size/mistyfield/rap/0.1.0-beta)
+![](https://badgen.net/docker/size/mistyfield/rap/0.2.0-beta)
 
 > If your team does not have any software tool, you can totally ignore this repository. If left unchanged, this
 > repository will be automatically deleted by the end of the season.
