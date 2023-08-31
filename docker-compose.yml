@@ -7,6 +7,7 @@ services:
       - "5000:5000"
     depends_on:
       - mysql-db
+      - parthub
     environment:
       - MYSQL_HOST=mysql-db
       - MYSQL_USER=root
@@ -25,3 +26,11 @@ services:
       - ./KineticHub/data/KCat_kcat.sql:/docker-entrypoint-initdb.d/KCat_kcat.sql
     ports:
       - "3306:3306"
+  parthub:
+    image: neo4j:5.11
+    restart: always
+    environment:
+      - NEO4J_AUTH=neo4j/igem2023
+    ports:
+      - "7474:7474"
+      - "7687:7687"

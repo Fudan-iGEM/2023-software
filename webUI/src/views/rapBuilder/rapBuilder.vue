@@ -33,12 +33,12 @@
                             </a-button>
                         </a-form-item>
                     </a-form>
-                    <div v-if="curStep===1">
+                    <div v-if="curStep===1" style="position: absolute;top: 50%">
                         <a-spin size="large"/>
-                        <h1>It's running now, this may take take a few seconds to a few minutes.</h1>
+                        <h1>🔧It's running now, this may take take a few seconds to a few minutes.</h1>
                     </div>
-                    <div v-if="curStep===2">
-                        <h1>Your file is in the process of being downloaded, if not, please click <a :href="url">here</a> to download manually</h1>
+                    <div v-if="curStep===2" style="position: absolute;top: 50%">
+                        <h1>✅Your file is in the process of being downloaded, if not, please click <a :href="url">here</a> to download manually.</h1>
                     </div>
                 </div>
             </a-layout-content>

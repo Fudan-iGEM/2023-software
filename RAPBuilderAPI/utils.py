@@ -76,50 +76,52 @@ def build_pRAP_system(data_list: list[dict]) -> tuple[Response, int]:
         rbs = generate_rbs(cds, TIR_target, is_first, is_last)
         if is_first:
             combined_sequence += rbs
-            sequences.append({'ec_number': ec_number, 'loc': [loc, loc + len(rbs) - 1], 'type': 'rbs',
+            sequences.append({'EC_number': ec_number, 'loc': [loc, loc + len(rbs)], 'type': 'rbs',
                               'description': f'rbs for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
             loc += len(rbs)
             combined_sequence += cds
-            sequences.append({'ec_number': ec_number, 'loc': [loc, loc + len(cds) - 1], 'type': 'cds',
+            sequences.append({'EC_number': ec_number, 'loc': [loc, loc + len(cds)], 'type': 'cds',
                               'description': f'cds for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
             loc += len(cds)
             combined_sequence += stem_loop_seq
             sequences.append(
-                {'ec_number': ec_number, 'loc': [loc - 21, loc + len(stem_loop_seq) - 1], 'type': 'stem_loop',
-                 'description': f'rbs for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
+                {'EC_number': ec_number, 'loc': [loc + len(stem_loop_seq) - 20, loc + len(stem_loop_seq)],
+                 'type': 'stem_loop', 'description': f'stem-loop for {ec_number} at optimal ratio of {optimal_ratio}',
+                 'id': id})
             loc += len(stem_loop_seq)
         elif is_last:
             combined_sequence += pre_seq
-            sequences.append({'ec_number': ec_number, 'loc': [loc + 5, loc + len(pre_seq) - 1], 'type': 'ribozyme',
-                              'description': f'rbs for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
+            sequences.append({'EC_number': ec_number, 'loc': [loc + 5, loc + len(pre_seq)], 'type': 'ribozyme',
+                              'description': f'ribozyme for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
             loc += len(pre_seq)
             combined_sequence += rbs
-            sequences.append({'ec_number': ec_number, 'loc': [loc, loc + len(rbs) - 1], 'type': 'rbs',
+            sequences.append({'EC_number': ec_number, 'loc': [loc, loc + len(rbs)], 'type': 'rbs',
                               'description': f'rbs for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
             loc += len(rbs)
             combined_sequence += cds
-            sequences.append({'ec_number': ec_number, 'loc': [loc, loc + len(cds) - 1], 'type': 'cds',
+            sequences.append({'EC_number': ec_number, 'loc': [loc, loc + len(cds)], 'type': 'cds',
                               'description': f'cds for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
             loc += len(cds)
         else:
             combined_sequence += pre_seq
-            sequences.append({'ec_number': ec_number, 'loc': [loc + 5, loc + len(pre_seq) - 1], 'type': 'ribozyme',
-                              'description': f'rbs for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
+            sequences.append({'EC_number': ec_number, 'loc': [loc + 5, loc + len(pre_seq)], 'type': 'ribozyme',
+                              'description': f'ribozyme for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
             loc += len(pre_seq)
             combined_sequence += rbs
-            sequences.append({'ec_number': ec_number, 'loc': [loc, loc + len(rbs) - 1], 'type': 'rbs',
+            sequences.append({'EC_number': ec_number, 'loc': [loc, loc + len(rbs)], 'type': 'rbs',
                               'description': f'rbs for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
             loc += len(rbs)
             combined_sequence += cds
-            sequences.append({'ec_number': ec_number, 'loc': [loc, loc + len(cds) - 1], 'type': 'cds',
+            sequences.append({'EC_number': ec_number, 'loc': [loc, loc + len(cds)], 'type': 'cds',
                               'description': f'cds for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
             loc += len(cds)
             combined_sequence += stem_loop_seq
             sequences.append(
-                {'ec_number': ec_number, 'loc': [loc - 21, loc + len(stem_loop_seq) - 1], 'type': 'stem_loop',
-                 'description': f'rbs for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
+                {'EC_number': ec_number, 'loc': [loc + len(stem_loop_seq) - 20, loc + len(stem_loop_seq)],
+                 'type': 'stem_loop','description': f'stem-loop for {ec_number} at optimal ratio of {optimal_ratio}',
+                 'id': id})
             loc += len(stem_loop_seq)
-    combined_seq_record = SeqRecord(Seq(combined_sequence))
+    combined_seq_record = SeqRecord(Seq(combined_sequence), id=task_id)
     combined_seq_record.annotations["molecule_type"] = "DNA"
     for seq_record in sequences:
         feature = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(seq_record['loc'][0], seq_record['loc'][1]),
