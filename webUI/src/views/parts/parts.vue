@@ -55,7 +55,7 @@
                             </a-form-item>
                         </a-form>
                     </div>
-                    <partcard :list-data="listData">
+                    <partcard :list-data="listData" :search-query="searchQuery">
                     </partcard>
                 </div>
             </a-layout-content>
@@ -73,8 +73,11 @@ for (let i = 0; i < 23; i++) {
     listData.push({
         number: 'BBa_114514',
         name: '1323232vfvevwevrv',
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+        year: '2013',
         date:'2013-4-5',
+        team:'fudan',
+        designer:'aabbccdd',
+        type: 'CDS',
         seqLength:100,
         cites:2,
         twinsNum:0,

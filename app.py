@@ -66,7 +66,7 @@ def rap_builder():
 
 
 @app.route('/PartHub2')
-def rap_builder():
+def parthub_2():
     return render_template('parthub2.html')
 
 
