@@ -65,6 +65,16 @@ def rap_builder():
     return render_template('rapBuilder.html')
 
 
+@app.route('/PartHub2')
+def rap_builder():
+    return render_template('parthub2.html')
+
+
+@app.route('/parts')
+def parts():
+    return render_template('parts.html')
+
+
 # for apis
 @app.route('/api/search/reaction', methods=['POST'])
 def handle_search_reaction():

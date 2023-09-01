@@ -14,6 +14,7 @@
                         >
                             <a-form-item>
                                 <a-input
+                                    :defaultValue="searchQuery"
                                     v-decorator="[
                                       'query',
                                       { rules: [{ required: true, message: 'Please input your query!' }] },
@@ -29,6 +30,7 @@
                             <a-form-item>
                                 Search reations by:
                                 <a-radio-group
+                                    :defaultValue="searchType"
                                     v-decorator="[
                                       'type',
                                       { rules: [{ required: true, message: 'Please select a search type!' }] },
@@ -60,9 +62,6 @@
                     :scroll="{ x: 1500, y: 600 }"
                     style="width: 95%"
                 >
-                    <p slot="title" style="font-weight: 700;font-size: 1rem">
-                        Your Search result of {{searchQuery}} on {{typeDict[searchType]}}:
-                    </p>
                     <a slot="action" slot-scope="text, record" @click="viewKcat(record.ec_number)">Get Kcat</a>
                 </a-table>
                 <kcat :ec_number="drawerNumber" :visible="drawerVisible" :data="drawerData" @onClose="handleVisibleChange" @update-reactions="handleAdd"></kcat>

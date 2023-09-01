@@ -97,6 +97,28 @@ module.exports = {
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
         title: 'RAP | RAP Builder',
       },
+      PartHub2: {
+        // entry for the pages
+        entry: 'src/views/parthub2/parthub2.js',
+        // the source template
+        template: 'src/views/parthub2/parthub2.html',
+        // output as dist/index.html
+        filename: 'parthub2.html',
+        // when using title option,
+        // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'RAP | PartHub 2',
+      },
+      parts: {
+        // entry for the pages
+        entry: 'src/views/parts/parts.js',
+        // the source template
+        template: 'src/views/parts/parts.html',
+        // output as dist/index.html
+        filename: 'parts.html',
+        // when using title option,
+        // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'RAP | PartHub 2 Results',
+      },
     },
   css:{
     loaderOptions:{

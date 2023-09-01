@@ -24,6 +24,10 @@
                 <a-icon type="compass" />
                 <span>Step 2: pRAP Builder</span>
             </a-menu-item>
+            <a-menu-item key="10" @click="toPartHub2()">
+                <a-icon type="deployment-unit" />
+                <span>PartHub 2</span>
+            </a-menu-item>
             <a-menu-item key="6" @click="toDocs()">
                 <a-icon type="book" />
                 <span>Docs</span>
@@ -78,6 +82,9 @@ export default {
         },
         toRAPBuilder(){
             window.location.href = '/RAPBuilder'
+        },
+        toPartHub2(){
+            window.location.href = '/PartHub2'
         }
     },
 };
