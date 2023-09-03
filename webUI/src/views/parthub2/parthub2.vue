@@ -6,7 +6,6 @@
                 <div :style="{ padding: '0', background: '#fff6f0', minHeight: '100%',display:'flex',justifyContent:'center',alignItems:'center' }">
                     <div style="text-align: center;height: 100%;width: 40%">
                         <img :src="require('@/assets/img/parthub.png')" style="height: 10rem">
-                        <p style="font-size: 3rem;font-weight: 700;">PartHub 2</p>
                         <a-form
                                 :form="form"
                                 @submit="handleSubmit"
@@ -33,7 +32,7 @@
                                       { rules: [{ required: true, message: 'Please select a search type!' }] },
                                     ]"
                                 >
-                                    <a-radio-button value="id">
+                                    <a-radio-button value="number">
                                         ID
                                     </a-radio-button>
                                     <a-radio-button value="sequence">
@@ -45,7 +44,7 @@
                                     <a-radio-button value="team">
                                         Team
                                     </a-radio-button>
-                                    <a-radio-button value="content">
+                                    <a-radio-button value="contents">
                                         Content
                                     </a-radio-button>
                                 </a-radio-group>

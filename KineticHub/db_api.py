@@ -6,7 +6,6 @@
 @Time : 2023/8/6 21:49
 """
 import json
-import statistics
 from copy import deepcopy
 
 import pymysql

@@ -22,7 +22,7 @@
             </a-sub-menu>
             <a-menu-item key="5" @click="toRAPBuilder()">
                 <a-icon type="compass" />
-                <span>Step 2: pRAP Builder</span>
+                <span>Step 2: RAP Builder</span>
             </a-menu-item>
             <a-menu-item key="10" @click="toPartHub2()">
                 <a-icon type="deployment-unit" />

@@ -34,8 +34,7 @@
                         </a-form-item>
                     </a-form>
                     <div v-if="curStep===1" style="position: absolute;top: 50%">
-                        <a-spin size="large"/>
-                        <h1>🔧It's running now, this may take take a few seconds to a few minutes.</h1>
+                        <a-spin size="large" tip="🔧It's running now, this may take take a few seconds to a few minutes."/>
                     </div>
                     <div v-if="curStep===2" style="position: absolute;top: 50%">
                         <h1>✅Your file is in the process of being downloaded, if not, please click <a :href="url">here</a> to download manually.</h1>
@@ -99,7 +98,6 @@ export default {
             e.preventDefault();
             this.form.validateFieldsAndScroll((err, values) => {
                 if (!err) {
-                    this.curStep = 1;
                     const formData = [];
                     const regex = /^[ATCGatcgUu]+$/;
                     for (let key in values){
@@ -126,6 +124,7 @@ export default {
                             formData.push(reaction);
                         }
                     }
+                    this.curStep = 1;
                     axios.post('/api/rap/build', {
                         formData})
                         .then(response => {

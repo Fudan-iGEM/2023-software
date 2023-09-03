@@ -15,6 +15,7 @@ from art import tprint
 import config
 from KineticHub.db_api import search_reaction, search_kcat, get_all_ec_numbers, add_kcat2mysql, test_connection, \
     get_reaction_data, calc_optimal_ratio, get_reaction_data_from_optimal_ratio
+from PartHub2.utils import parthub_search
 from RAPBuilderAPI.utils import build_pRAP_system
 
 db_config = config.db_config
@@ -177,6 +178,17 @@ def handle_rap_build():
     if res[1] != 200:
         app.logger.warning(str(res[0].data.decode('utf-8')))
     return res
+
+
+@app.route('/api/parthub/search', methods=['POST'])
+def handle_parthub_search():
+    data = request.json
+    if not data or not data.get('partHubQuery') or not data.get('partHubType'):
+        app.logger.warning('Missing query or type')
+        return jsonify({"message": "Missing query or type"}), 400
+    query = data.get('partHubQuery')
+    search_type = data.get('partHubType')
+    return parthub_search(query, search_type)
 
 
 @app.route('/api/test/connection')

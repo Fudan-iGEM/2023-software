@@ -31,6 +31,9 @@ services:
     restart: always
     environment:
       - NEO4J_AUTH=neo4j/igem2023
+      - NEO4J_PLUGINS=["graph-data-science"]
+      - NEO4J_dbms_security_procedures_whitelist=gds.*
+      - NEO4J_dbms_security_procedures_unrestricted=gds.*
     ports:
       - "7474:7474"
       - "7687:7687"

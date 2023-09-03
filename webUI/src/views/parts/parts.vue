@@ -17,7 +17,7 @@
                                         :defaultValue="searchQuery"
                                         v-decorator="[
                                       'query',
-                                      { rules: [{ required: true, message: 'Please input your query!' }] },
+                                      {initialValue: searchQuery, rules: [{ required: true, message: 'Please input your query!'}] },
                                     ]"
                                         placeholder="..."
                                 >
@@ -30,13 +30,13 @@
                             <a-form-item>
                                 Search parts by:
                                 <a-radio-group
-                                        :defaultValue="searchType"
+                                        :default-value="searchType"
                                         v-decorator="[
                                       'type',
-                                      { rules: [{ required: true, message: 'Please select a search type!' }] },
+                                      {initialValue: searchType, rules: [{ required: true, message: 'Please select a search type!'}] },
                                     ]"
                                 >
-                                    <a-radio-button value="id">
+                                    <a-radio-button value="number">
                                         ID
                                     </a-radio-button>
                                     <a-radio-button value="sequence">
@@ -48,14 +48,15 @@
                                     <a-radio-button value="team">
                                         Team
                                     </a-radio-button>
-                                    <a-radio-button value="content">
+                                    <a-radio-button value="contents">
                                         Content
                                     </a-radio-button>
                                 </a-radio-group>
                             </a-form-item>
                         </a-form>
                     </div>
-                    <partcard :list-data="listData" :search-query="searchQuery">
+                    <a-spin v-if="loading" tip="loading"></a-spin>
+                    <partcard v-else :list-data="listData" :search-query="searchQuery" style="width: 95%">
                     </partcard>
                 </div>
             </a-layout-content>
@@ -68,46 +69,34 @@
 <script>
 import sidebar from "@/components/sidebar.vue";
 import partcard from "@/components/partcard.vue";
-const listData = [];
-for (let i = 0; i < 23; i++) {
-    listData.push({
-        number: 'BBa_114514',
-        name: '1323232vfvevwevrv',
-        year: '2013',
-        date:'2013-4-5',
-        team:'fudan',
-        designer:'aabbccdd',
-        type: 'CDS',
-        seqLength:100,
-        cites:2,
-        twinsNum:0,
-        isFavorite: 'True',
-        released: 'Not Released',
-        description:
-            'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-        content:
-            'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-    });
-}
+import axios from "axios";
+const listData = []
 export default {
     beforeCreate() {
         this.form = this.$form.createForm(this, { name: 'search' });
     },
     created() {
         const searchType = localStorage.getItem('partHubType');
-        const searchQuery = localStorage.getItem('partHubType');
+        const searchQuery = localStorage.getItem('partHubQuery');
         if (!searchType || !searchQuery) {
-            window.location.href = '/parthub2';
+            window.location.href = '/PartHub2';
         }
-        /*axios.post('/api/search/reaction', {
-            'searchType': searchType,
-            'searchQuery':searchQuery})
+        console.log(this.loading);
+        axios.post('/api/parthub/search', {
+            'partHubType': searchType,
+            'partHubQuery':searchQuery})
             .then(response => {
-                this.data = response.data})
+                this.listData = response.data;
+                if (response.data.message){
+                    this.$message.info(response.data.message);
+                }
+                this.loading=false;
+            })
             .catch(error => {
                 console.error(error);
                 this.$message.error(error.message);
-            });*/
+                this.loading=false;
+            });
     },
     components:{
         partcard,
@@ -119,14 +108,8 @@ export default {
             searchResults: [],
             searchType: localStorage.getItem('partHubType'),
             searchQuery: localStorage.getItem('partHubQuery'),
-            typeDict:{
-                'id': 'ID',
-                'name': 'Name',
-                'sequence': 'Sequence',
-                'substrates': 'Substrate',
-                'products': 'Products'
-            },
             listData,
+            loading:true
         };
     },
     methods: {

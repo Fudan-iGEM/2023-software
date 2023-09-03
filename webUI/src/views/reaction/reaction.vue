@@ -17,7 +17,7 @@
                                     :defaultValue="searchQuery"
                                     v-decorator="[
                                       'query',
-                                      { rules: [{ required: true, message: 'Please input your query!' }] },
+                                      {initialValue: searchQuery, rules: [{ required: true, message: 'Please input your query!' }] },
                                     ]"
                                     placeholder="..."
                                 >
@@ -33,7 +33,7 @@
                                     :defaultValue="searchType"
                                     v-decorator="[
                                       'type',
-                                      { rules: [{ required: true, message: 'Please select a search type!' }] },
+                                      {initialValue: searchType, rules: [{ required: true, message: 'Please select a search type!' }] },
                                     ]"
                                 >
                                     <a-radio-button value="ec_number">
