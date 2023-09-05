@@ -55,8 +55,8 @@
                             </a-form-item>
                         </a-form>
                     </div>
-                    <a-spin v-if="loading" tip="loading"></a-spin>
-                    <partcard v-else :list-data="listData" :search-query="searchQuery" style="width: 95%">
+                    <a-spin v-if="loading" tip="loading" size="large"></a-spin>
+                    <partcard v-else :list-data="listData" :search-query="searchQuery" style="width: 95%" @clickTitle="showPart">
                     </partcard>
                 </div>
             </a-layout-content>
@@ -81,7 +81,6 @@ export default {
         if (!searchType || !searchQuery) {
             window.location.href = '/PartHub2';
         }
-        console.log(this.loading);
         axios.post('/api/parthub/search', {
             'partHubType': searchType,
             'partHubQuery':searchQuery})
@@ -109,7 +108,8 @@ export default {
             searchType: localStorage.getItem('partHubType'),
             searchQuery: localStorage.getItem('partHubQuery'),
             listData,
-            loading:true
+            loading:true,
+            number:''
         };
     },
     methods: {
@@ -117,7 +117,6 @@ export default {
             e.preventDefault();
             this.form.validateFields(async (err, values) => {
                 if (!err) {
-                    console.log(values)
                     if (values.type==='sequence'){
                         const regex = /^[ATCGatcgUu]+$/;
                         if (!regex.test(values.query)){
@@ -130,6 +129,10 @@ export default {
                     window.location.href = '/parts'
                 }
             });
+        },
+        showPart(num){
+            localStorage.setItem('curPart',num);
+            window.open('/treeMap');
         },
     }
 };

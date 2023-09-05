@@ -16,7 +16,7 @@
                         Type: {{item.type}}
                     </a-tag>
                 </div>
-                <a slot="title" style="color: #e37654">{{item.number}}: {{item.name}}</a>
+                <a slot="title" style="color: #e37654" @click="handleClick(item.number)">{{item.number}}: {{item.name}}</a>
             </a-list-item-meta>
             <p v-html="highlight(item.matchedContents)"></p>
             <p style="color: gray">{{item.cites}} cited · {{item.twins_num}} twin(s) · {{item.length}} bp · {{item.isfavorite ==='True' ? 'Favorite Part · ':''}}
@@ -45,6 +45,9 @@ export default {
             }
             const regex = new RegExp(this.searchQuery, "gi");
             return content.replace(regex, '<span style="color:red;">$&</span>') + '...';
+        },
+        handleClick(number){
+            this.$emit('clickTitle',number);
         }
     }
 }

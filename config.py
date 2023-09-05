@@ -11,3 +11,8 @@ db_config = {
     'password': '123456',
     'charset': 'utf8mb4'
 }
+parthub_config = {
+    "serverUrl": r"bolt://54.169.242.254:7687",
+    "serverUser": r"neo4j",
+    "serverPassword": r"igem2023"
+}

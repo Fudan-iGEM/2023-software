@@ -19,6 +19,7 @@ from PartHub2.utils import parthub_search
 from RAPBuilderAPI.utils import build_pRAP_system
 
 db_config = config.db_config
+parthub_config = config.parthub_config
 template_folder = path.abspath('webUI/template')
 static_folder = path.abspath('webUI/static')
 app = Flask(__name__, template_folder=template_folder, static_folder=static_folder, static_url_path='')
@@ -74,6 +75,11 @@ def parthub_2():
 @app.route('/parts')
 def parts():
     return render_template('parts.html')
+
+
+@app.route('/treeMap')
+def treeMap():
+    return render_template('treeMap.html')
 
 
 # for apis
@@ -189,6 +195,11 @@ def handle_parthub_search():
     query = data.get('partHubQuery')
     search_type = data.get('partHubType')
     return parthub_search(query, search_type)
+
+
+@app.route('/api/parthub/config')
+def handle_parthub_config():
+    return jsonify(parthub_config), 200
 
 
 @app.route('/api/test/connection')

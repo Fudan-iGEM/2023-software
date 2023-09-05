@@ -119,6 +119,17 @@ module.exports = {
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
         title: 'RAP | PartHub 2 Results',
       },
+      treeMap: {
+        // entry for the pages
+        entry: 'src/views/treeMap/treeMap.js',
+        // the source template
+        template: 'src/views/treeMap/treeMap.html',
+        // output as dist/index.html
+        filename: 'treeMap.html',
+        // when using title option,
+        // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'RAP | Tree Map',
+      },
     },
   css:{
     loaderOptions:{
