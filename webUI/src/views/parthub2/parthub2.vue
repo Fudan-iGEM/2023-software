@@ -35,6 +35,9 @@
                                     <a-radio-button value="number">
                                         ID
                                     </a-radio-button>
+                                    <a-radio-button value="name">
+                                        Name
+                                    </a-radio-button>
                                     <a-radio-button value="sequence">
                                         Sequence
                                     </a-radio-button>

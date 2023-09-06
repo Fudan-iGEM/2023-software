@@ -40,15 +40,15 @@ export default {
     },
     methods:{
         highlight(content){
-            if (content===null){
-                content = 'nan';
+            if (content==='nan'){
+                return '';
             }
             const regex = new RegExp(this.searchQuery, "gi");
             return content.replace(regex, '<span style="color:red;">$&</span>') + '...';
         },
         handleClick(number){
             this.$emit('clickTitle',number);
-        }
+        },
     }
 }
 </script>

@@ -5,10 +5,14 @@
 @Author : Zhiyue Chen
 @Time : 2023/9/3 13:47
 """
+import os
 from operator import itemgetter
 from typing import Any
 
-from flask import jsonify
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from flask import jsonify, Response
 from py2neo import Node, Graph, NodeMatcher
 import re
 
@@ -131,7 +135,7 @@ def sort_node(node_dic_lst: list[dict]):
     return unique_community_list + else_list
 
 
-def parthub_search(search_key: str, search_type: str):
+def parthub_search(search_key: str, search_type: str) -> tuple[Response, int]:
     if ' AND ' in search_key:
         kwd_list = search_key.split(' AND ')
         all_res = multiple_search(kwd_list, search_type, 'AND')
@@ -144,3 +148,42 @@ def parthub_search(search_key: str, search_type: str):
         return jsonify(sort_node(all_res)), 200
     else:
         return jsonify({'message': 'No search result found'}), 200
+
+
+def init_create() -> None:
+    if not os.path.exists(r'./parthub'):
+        os.makedirs(r'./parthub')
+
+
+def create_parthub_seq_file(part_id: str) -> str:
+    """
+    :param part_id: the id of the part, like BBa_K3606003
+    :return: path of the sequence file in GeneBank format
+    """
+    init_create()
+    filename = part_id + '.gb'
+    query = """
+    MATCH (p:Part {number: 'part_id'})
+    RETURN p.sequence;
+    """
+    query = re.sub('part_id', part_id, query)
+    sequence = str(graph.run(query).evaluate())
+    seq_record = SeqRecord(Seq(sequence), id=part_id)
+    seq_record.annotations["molecule_type"] = "DNA"
+    with open(os.path.join(r'./parthub', filename), 'w') as f:
+        SeqIO.write(seq_record, f, "genbank")
+    return os.path.join(r'./parthub', filename)
+
+
+def get_part_id(name: str) -> str:
+    """
+    :param name: the id of the part, like BBa_K3606003
+    :return: part id in neo4j database
+    """
+    query = """
+        MATCH (p:Part {number: 'part_id'})
+        RETURN ID(p);
+        """
+    query = re.sub('part_id', name, query)
+    part_id = str(graph.run(query).evaluate())
+    return part_id

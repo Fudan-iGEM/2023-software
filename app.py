@@ -15,7 +15,7 @@ from art import tprint
 import config
 from KineticHub.db_api import search_reaction, search_kcat, get_all_ec_numbers, add_kcat2mysql, test_connection, \
     get_reaction_data, calc_optimal_ratio, get_reaction_data_from_optimal_ratio
-from PartHub2.utils import parthub_search
+from PartHub2.utils import parthub_search, create_parthub_seq_file, get_part_id
 from RAPBuilderAPI.utils import build_pRAP_system
 
 db_config = config.db_config
@@ -197,9 +197,13 @@ def handle_parthub_search():
     return parthub_search(query, search_type)
 
 
-@app.route('/api/parthub/config')
+@app.route('/api/parthub/config', methods=['POST'])
 def handle_parthub_config():
-    return jsonify(parthub_config), 200
+    data = request.json
+    if not data or not data.get('curPart'):
+        app.logger.warning('Missing curPart')
+        return jsonify({"message": "Missing curPart"}), 400
+    return jsonify({'id': get_part_id(data.get('curPart')), 'config': parthub_config}), 200
 
 
 @app.route('/api/test/connection')
@@ -211,6 +215,13 @@ def handle_test_connection():
 @app.route('/download/<filename>')
 def handle_download(filename):
     filepath = os.path.join('./results', filename)
+    if os.path.exists(filepath):
+        return send_file(filepath, as_attachment=True)
+
+
+@app.route('/seq/download/<part_id>')
+def handle_seq_download(part_id):
+    filepath = create_parthub_seq_file(part_id)
     if os.path.exists(filepath):
         return send_file(filepath, as_attachment=True)
 

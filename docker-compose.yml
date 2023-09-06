@@ -10,9 +10,10 @@ services:
       - parthub
     environment:
       - MYSQL_HOST=mysql-db
-      - MYSQL_USER=root
       - MYSQL_PASSWORD=123456
-      - MYSQL_DB=RAP
+      - SERVER_URL=bolt://54.169.242.254:7687
+      - SERVER_USER=neo4j
+      - SERVER_PASSWORD=igem2023
   mysql-db:
     image: mysql:5.7
     command: --default-authentication-plugin=mysql_native_password

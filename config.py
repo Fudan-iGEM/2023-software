@@ -5,14 +5,15 @@
 @Author : Zhiyue Chen
 @Time : 2023/8/6 21:50
 """
+import os
 db_config = {
-    'host': 'mysql-db',
+    'host': os.environ.get('MYSQL_HOST'),
     'user': 'root',
-    'password': '123456',
+    'password': os.environ.get('MYSQL_PASSWORD'),
     'charset': 'utf8mb4'
 }
 parthub_config = {
-    "serverUrl": r"bolt://54.169.242.254:7687",
-    "serverUser": r"neo4j",
-    "serverPassword": r"igem2023"
+    "serverUrl": os.environ.get('SERVER_URL'),
+    "serverUser": os.environ.get('SERVER_USER'),
+    "serverPassword": os.environ.get('SERVER_PASSWORD')
 }

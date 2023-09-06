@@ -46,13 +46,16 @@ def generate_rbs(cds: str, TIR_target: float, is_first: bool = False, is_last: b
     return rbs
 
 
-def init_builder():
+def init_builder() -> None:
     if not os.path.exists(r'./results'):
         os.makedirs(r'./results')
 
 
 def build_pRAP_system(data_list: list[dict]) -> tuple[Response, int]:
-    print(data_list)
+    """
+    :param data_list: list of data of reactions
+    :return: json format data that could be used in api
+    """
     task_id = str(uuid.uuid4())
     filename = task_id + '.gb'
     init_builder()
@@ -118,7 +121,7 @@ def build_pRAP_system(data_list: list[dict]) -> tuple[Response, int]:
             combined_sequence += stem_loop_seq
             sequences.append(
                 {'EC_number': ec_number, 'loc': [loc + len(stem_loop_seq) - 20, loc + len(stem_loop_seq)],
-                 'type': 'stem_loop','description': f'stem-loop for {ec_number} at optimal ratio of {optimal_ratio}',
+                 'type': 'stem_loop', 'description': f'stem-loop for {ec_number} at optimal ratio of {optimal_ratio}',
                  'id': id})
             loc += len(stem_loop_seq)
     combined_seq_record = SeqRecord(Seq(combined_sequence), id=task_id)
