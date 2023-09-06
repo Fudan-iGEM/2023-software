@@ -9,12 +9,12 @@
                     <div style="margin-left: 1rem;width: 60%">
                         <h1 style="color: #e37654">Your Part map of {{curPart}}:</h1>
                         <p>Scroll to zoom the canvas and drag to move the nodes. Click the circle to display the part details and double click to go to the part page.</p>
-                        <div style="display: flex;flex-direction: column;align-items: center;">
-                            <div id="viz" style="display: flex;justify-content: center; align-items: center; ">
+                        <div style="display: flex;flex-direction: column;align-items: center;position: relative;">
+                            <div id="viz" style="display: flex;justify-content: center; align-items: center;flex-direction: column; ">
                                 <a-spin :spinning="loading" tip="loading" size="large">
                                 </a-spin>
                             </div>
-                            <img :src="require('@/assets/img/colorbar.svg')" style="height: 4%;position: fixed;bottom: 7%;">
+                            <img :src="require('@/assets/img/colorbar.svg')" style="height: 4%;position: absolute;bottom: 0;">
                         </div>
                     </div>
                     <div style="margin-left: 1rem;width: 35%">

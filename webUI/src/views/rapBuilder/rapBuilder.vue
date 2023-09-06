@@ -23,7 +23,7 @@
                                         ],
                                       },
                                     ]"
-                                :placeholder="'Coding Sequence of EC' + ec_number"
+                                :placeholder="'Coding Sequence of EC' + reaction.ec_number"
                                 :rows="3"
                             />
                         </a-form-item>
