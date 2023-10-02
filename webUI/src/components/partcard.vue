@@ -44,7 +44,11 @@ export default {
                 return '';
             }
             const regex = new RegExp(this.searchQuery, "gi");
-            return content.replace(regex, '<span style="color:red;">$&</span>') + '...';
+            try{
+                return content.replace(regex, '<span style="color:red;">$&</span>') + '...';
+            } catch (error){
+                return content + '...';
+            }
         },
         handleClick(number){
             this.$emit('clickTitle',number);

@@ -131,7 +131,7 @@ export default {
                             if (response.data) {
                                 this.$message.success(response.data.message);
                                 this.taskID =  response.data.taskID;
-                                let filename = this.taskID + '.gb';
+                                let filename = this.taskID + '.zip';
                                 this.url = '/download/' + filename
                                 console.log(filename);
                                 this.curStep = 2;

@@ -94,7 +94,7 @@ h1 {
     width: 8rem;
     color: #fff;
     border-radius: 5px;
-    font-family: Barlow, Helvetica, Arial, sans-serif;
+    font-family: HarmonyOS_Sans, Helvetica, Arial, sans-serif;
     font-weight: 700;
     font-size: 1rem;
     cursor: pointer;

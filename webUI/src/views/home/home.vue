@@ -7,10 +7,10 @@
                     <div style="text-align: center;height: 100%">
                         <img :src="require('@/assets/img/logo.svg')" style="height: 20rem">
                         <p style="font-size: 3rem;font-weight: 700;">Welcome to RAP!</p>
-                        <p style="font-size: 1rem">You can start building your linear reactions from step 1.</p>
+                        <p style="font-size: 1rem">You can start building your cascade reactions from step 1.</p>
                         <p style="font-size: 1rem">And then run step 2 to build your pRAP system.</p>
                         <p style="font-size: 1rem">You can also promote your own pRAP system design after a DBTL cycle using pRAPer.</p>
-                        <p style="font-size: 1rem;font-weight: 700;">For more tutorials and details, please visit our documentation and our wiki!</p>
+                        <p style="font-size: 1rem;font-weight: 700;">For more tutorials and details, please visit our <a target="_blank" href="https://mistyfield.github.io/RAP-Docs/">documentation</a> and our <a target="_blank" href="https://2023.igem.wiki/fudan/software">wiki</a>!</p>
                     </div>
                 </div>
                 <a-drawer

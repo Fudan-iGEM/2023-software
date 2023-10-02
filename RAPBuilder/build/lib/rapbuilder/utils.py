@@ -29,6 +29,8 @@ import math
 
 from rapbuilder.rbs_predictor import RBSPredictor
 
+from rapbuilder.stem_loop_predictor import StemLoopPredictor
+
 
 def monte_carlo_rbs(pre_seq: str, post_seq: str, TIR_target: float = 0, rbs_init: str = None, dG_target: float = None,
                     max_iter: int = 10000) -> tuple:
@@ -379,3 +381,122 @@ def calc_constraints(estimator: RBSPredictor) -> bool:
     if three_state_indicator > config.max_three_state_indicator:
         return True
     return False
+
+def get_initial_stem_loop(dG_target: float) -> tuple:
+    """
+    generate and select a suitable initial stem loop.
+    :param dG_target: target delta_G
+    :return: tuple contains stem loop sequence and its StemLoopPredictor
+    """
+    dG_target_nondim = dG_target / StemLoopPredictor(constant.stem_loop).calc_dG_stem_loop()
+    if dG_target_nondim < 0.2:
+        core_length = 12
+    elif dG_target_nondim < 0.4:
+        core_length = 14
+    elif dG_target_nondim < 0.6:
+        core_length = 16
+    elif dG_target_nondim < 0.8:
+        core_length = 18
+    else:
+        core_length = 20
+    stem_loop = constant.stem_loop[len(constant.stem_loop)//2-core_length//2:len(constant.stem_loop)//2+core_length//2]
+    estimator = run_stem_loop_predictor(stem_loop)
+    return stem_loop, estimator
+
+def run_stem_loop_predictor(stem_loop:str) -> StemLoopPredictor:
+    """
+    :param stem_loop: sequence of stem loop
+    :return: StemLoopPredictor
+    """
+    estimator = StemLoopPredictor(stem_loop)
+    estimator.calc_dG()
+    return estimator
+
+def monte_carlo_stem_loop(TIR_target: float = 0, stem_loop_init: str = None, dG_target: float = None,
+                    max_iter: int = 10000) -> tuple:
+    """
+    :param TIR_target: target translation initial rate
+    :param stem_loop_init: initial stem loop sequence(optional)
+    :param dG_target: target delta_G
+    :param max_iter: maximum number of iterations
+    :return: tuple contains results
+    """
+    if TIR_target:
+        ...
+    dG_target = min(max(dG_target, StemLoopPredictor(constant.stem_loop).calc_dG_stem_loop()), 0.)
+    tol = 0.1  # kcal/mol
+    annealing_accept_ratios = [0.01, 0.20]  # first is min, second is max
+    annealing_min_moves = 50
+    RT_init = 0.6  # roughly 300K
+    weighted_moves = [('insert', 0.10), ('delete', 0.10), ('replace', 0.80)]
+
+    # cost function
+    def calc_energy(input_dG):
+        return abs(input_dG - dG_target)
+
+    if stem_loop_init is None:
+        stem_loop, estimator = get_initial_stem_loop(dG_target)
+    else:
+        stem_loop = stem_loop_init
+        estimator = run_stem_loop_predictor(stem_loop)
+    counter = 0
+    accepts = 0
+    rejects = 0
+    RT = RT_init
+    energy = calc_energy(estimator.dG_stem_loop)
+    pbar = tqdm(total=max_iter)
+    while energy > tol and counter < max_iter:
+        try:
+            counter += 1
+            move = weighted_choice(weighted_moves)
+            stem_loop_new = ''
+            if move == 'insert':
+                pos = int(random.uniform(0.0, 1.0) * len(stem_loop))
+                letter = random.choice(list(constant.nucleotides))
+                stem_loop_new = stem_loop[0:pos] + letter + stem_loop[pos:]
+            if move == 'delete':
+                if len(stem_loop) > 1:
+                    pos = int(random.uniform(0.0, 1.0) * len(stem_loop))
+                    stem_loop_new = stem_loop[0:pos] + stem_loop[pos + 1:]
+                else:
+                    stem_loop_new = stem_loop
+            if move == 'replace':
+                pos = int(random.uniform(0.0, 1.0) * len(stem_loop))
+                letter = random.choice(list(constant.nucleotides))
+                stem_loop_new = stem_loop[0:pos] + letter + stem_loop[pos + 1:]
+            if len(stem_loop_new) > constant.cutoff_stem_loop:
+                stem_loop_new = stem_loop_new[:constant.cutoff_stem_loop]
+            estimator = run_stem_loop_predictor(stem_loop_new)
+            energy_new = calc_energy(estimator.dG_stem_loop)
+            if energy_new < energy:
+                stem_loop = stem_loop_new
+                energy = energy_new
+            else:
+                ddE = (energy - energy_new)
+                metropolis = math.exp(ddE / RT)
+                prob = random.uniform(0.0, 1.0)
+                if metropolis > prob:
+                    # accept move based on conditional probability
+                    stem_loop = stem_loop_new
+                    energy = energy_new
+                    accepts += 1
+                else:
+                    rejects += 1
+            if accepts + rejects > annealing_min_moves:
+                ratio = float(accepts) / float(accepts + rejects)
+                if ratio > annealing_accept_ratios[1]:
+                    # too many accepts, reduce RT
+                    RT = RT / 2.0
+                    accepts = 0
+                    rejects = 0
+                if ratio < annealing_accept_ratios[0]:
+                    # too many rejects, increase RT
+                    RT = RT * 2.0
+                    accepts = 0
+                    rejects = 0
+            pbar.update(1)
+        except KeyboardInterrupt:
+            estimator = run_stem_loop_predictor(stem_loop)
+            return estimator.dG_stem_loop, stem_loop, estimator, counter
+    pbar.close()
+    return estimator.dG_stem_loop, stem_loop, estimator, counter

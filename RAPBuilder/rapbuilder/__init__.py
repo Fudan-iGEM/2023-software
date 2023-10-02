@@ -5,4 +5,4 @@
 @Author : Zhiyue Chen
 @Time : 2023/8/24 14:18
 """
-from . import constant, config, rbs_predictor, utils
+from . import constant, config, rbs_predictor, stem_loop_predictor, utils

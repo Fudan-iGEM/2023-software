@@ -50,7 +50,7 @@ class RBSPredictor:
         self.dangles = 2
         RNA.cvar.uniq_ML = 1
         mRNA = mRNA.upper()
-        allowed_chars = set("ACGU")
+        allowed_chars = set("ACGUT")
         if set(mRNA) > allowed_chars:
             raise ValueError('Please input correct coding of mRNA!')
         start_codon_range[0] = max(start_codon_range[0], 0)

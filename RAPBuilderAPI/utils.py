@@ -5,7 +5,9 @@
 @Author : Zhiyue Chen
 @Time : 2023/8/26 2:27
 """
+import csv
 import os
+import shutil
 import uuid
 
 # References
@@ -46,9 +48,17 @@ def generate_rbs(cds: str, TIR_target: float, is_first: bool = False, is_last: b
     return rbs
 
 
-def init_builder() -> None:
+def init_builder(folder_name:str) -> None:
+    """
+    :param folder_name: name of the folder
+    :return: None
+    """
     if not os.path.exists(r'./results'):
         os.makedirs(r'./results')
+    if not os.path.exists(r'./results/temp'):
+        os.makedirs(r'./results/temp')
+    if not os.path.exists(os.path.join(r'./results/temp',folder_name)):
+        os.makedirs(os.path.join(r'./results/temp',folder_name))
 
 
 def build_pRAP_system(data_list: list[dict]) -> tuple[Response, int]:
@@ -57,8 +67,10 @@ def build_pRAP_system(data_list: list[dict]) -> tuple[Response, int]:
     :return: json format data that could be used in api
     """
     task_id = str(uuid.uuid4())
-    filename = task_id + '.gb'
-    init_builder()
+    filename = 'sequence.gb'
+    csv_name = "annotation.csv"
+    csv_list = []
+    init_builder(task_id)
     sequences = []
     combined_sequence = ''
     loc = 0
@@ -81,48 +93,80 @@ def build_pRAP_system(data_list: list[dict]) -> tuple[Response, int]:
             combined_sequence += rbs
             sequences.append({'EC_number': ec_number, 'loc': [loc, loc + len(rbs)], 'type': 'rbs',
                               'description': f'rbs for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
+            csv_list.append({'EC_number': ec_number, 'loc': [loc, loc + len(rbs)], 'type': 'rbs',
+                              'description': f'rbs for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id,
+                             'sequence':rbs})
             loc += len(rbs)
             combined_sequence += cds
             sequences.append({'EC_number': ec_number, 'loc': [loc, loc + len(cds)], 'type': 'cds',
                               'description': f'cds for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
+            csv_list.append({'EC_number': ec_number, 'loc': [loc, loc + len(cds)], 'type': 'cds',
+                             'description': f'cds for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id,
+                             'sequence': cds})
             loc += len(cds)
             combined_sequence += stem_loop_seq
             sequences.append(
                 {'EC_number': ec_number, 'loc': [loc + len(stem_loop_seq) - 20, loc + len(stem_loop_seq)],
                  'type': 'stem_loop', 'description': f'stem-loop for {ec_number} at optimal ratio of {optimal_ratio}',
                  'id': id})
+            csv_list.append({'EC_number': ec_number, 'loc': [loc + len(stem_loop_seq) - 20, loc + len(stem_loop_seq)],
+                             'type': 'stem_loop',
+                             'description': f'stem-loop for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id,
+                             'sequence': stem_loop_seq})
             loc += len(stem_loop_seq)
         elif is_last:
             combined_sequence += pre_seq
             sequences.append({'EC_number': ec_number, 'loc': [loc + 5, loc + len(pre_seq)], 'type': 'ribozyme',
                               'description': f'ribozyme for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
+            csv_list.append({'EC_number': ec_number, 'loc': [loc + 5, loc + len(pre_seq)], 'type': 'ribozyme',
+                             'description': f'stem-loop for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id,
+                             "sequence": pre_seq})
             loc += len(pre_seq)
             combined_sequence += rbs
             sequences.append({'EC_number': ec_number, 'loc': [loc, loc + len(rbs)], 'type': 'rbs',
                               'description': f'rbs for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
+            csv_list.append({'EC_number': ec_number, 'loc': [loc, loc + len(rbs)], 'type': 'rbs',
+                             'description': f'rbs for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id,
+                             'sequence': rbs})
             loc += len(rbs)
             combined_sequence += cds
             sequences.append({'EC_number': ec_number, 'loc': [loc, loc + len(cds)], 'type': 'cds',
                               'description': f'cds for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
+            csv_list.append({'EC_number': ec_number, 'loc': [loc, loc + len(cds)], 'type': 'cds',
+                             'description': f'cds for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id,
+                             'sequence': cds})
             loc += len(cds)
         else:
             combined_sequence += pre_seq
             sequences.append({'EC_number': ec_number, 'loc': [loc + 5, loc + len(pre_seq)], 'type': 'ribozyme',
                               'description': f'ribozyme for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
+            csv_list.append({'EC_number': ec_number, 'loc': [loc + 5, loc + len(pre_seq)], 'type': 'ribozyme',
+                             'description': f'stem-loop for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id,
+                             "sequence": pre_seq})
             loc += len(pre_seq)
             combined_sequence += rbs
             sequences.append({'EC_number': ec_number, 'loc': [loc, loc + len(rbs)], 'type': 'rbs',
                               'description': f'rbs for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
+            csv_list.append({'EC_number': ec_number, 'loc': [loc, loc + len(rbs)], 'type': 'rbs',
+                             'description': f'rbs for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id,
+                             'sequence': rbs})
             loc += len(rbs)
             combined_sequence += cds
             sequences.append({'EC_number': ec_number, 'loc': [loc, loc + len(cds)], 'type': 'cds',
                               'description': f'cds for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id})
+            csv_list.append({'EC_number': ec_number, 'loc': [loc, loc + len(cds)], 'type': 'cds',
+                             'description': f'cds for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id,
+                             'sequence': cds})
             loc += len(cds)
             combined_sequence += stem_loop_seq
             sequences.append(
                 {'EC_number': ec_number, 'loc': [loc + len(stem_loop_seq) - 20, loc + len(stem_loop_seq)],
                  'type': 'stem_loop', 'description': f'stem-loop for {ec_number} at optimal ratio of {optimal_ratio}',
                  'id': id})
+            csv_list.append({'EC_number': ec_number, 'loc': [loc + len(stem_loop_seq) - 20, loc + len(stem_loop_seq)],
+                             'type': 'stem_loop',
+                             'description': f'stem-loop for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id,
+                             'sequence': stem_loop_seq})
             loc += len(stem_loop_seq)
     combined_seq_record = SeqRecord(Seq(combined_sequence), id=task_id)
     combined_seq_record.annotations["molecule_type"] = "DNA"
@@ -130,6 +174,14 @@ def build_pRAP_system(data_list: list[dict]) -> tuple[Response, int]:
         feature = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(seq_record['loc'][0], seq_record['loc'][1]),
                                         type=seq_record['type'], qualifiers=seq_record)
         combined_seq_record.features.append(feature)
-    with open(os.path.join(r'./results', filename), 'w') as f:
+    with open(os.path.join(r'./results', 'temp', task_id, filename), 'w') as f:
         SeqIO.write(combined_seq_record, f, "genbank")
+    # add annotation of sequence
+    with open(os.path.join(r'./results', 'temp', task_id, csv_name), 'w') as f:
+        writer = csv.DictWriter(f, fieldnames=['EC_number', 'loc', 'type', 'description', 'id', 'sequence'],
+                                delimiter=',')
+        writer.writeheader()
+        for row in csv_list:
+            writer.writerow(row)
+    shutil.make_archive(os.path.join(r'./results',task_id), 'zip', os.path.join(r'./results', 'temp', task_id))
     return jsonify({'message': 'Your task is complete!', 'taskID': task_id}), 200

@@ -155,7 +155,7 @@ export default {
                                 },
                             },
                         },
-                        initialCypher: `MATCH (n)-[r*0..]->(m:Part{number:'${this.curPart}'}) RETURN n,r,m LIMIT 150`
+                        initialCypher: `MATCH (n)-[r*0..]->(m:Part{number:'${this.curPart}'}) RETURN n,r,m UNION MATCH (n:Part{number:'${this.curPart}'})-[r*0..]->(m) RETURN n,r,m LIMIT 150`
                     };
                     viz = new NeoVis(config);
                     var doubleClickLocked = false;
