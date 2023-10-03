@@ -10,6 +10,29 @@
                         <a-step title="Download GeneBank format pRAP sequence" />
                     </a-steps>
                     <a-form :form="form" @submit="handleSubmit" layout='horizontal' style="width: 80%" v-if="curStep===0">
+                        <a-form-item label="Mode" has-feedback>
+                            <a-select
+                                default-value="rbs"
+                                v-decorator="[
+                                      'mode',
+                                      {
+                                        rules: [
+                                          {
+                                            required: true,
+                                            message: 'Please select design mode!',
+                                          },
+                                        ],
+                                      },
+                                    ]"
+                            >
+                                <a-select-option value="rbs">
+                                    RBS design mode
+                                </a-select-option>
+                                <a-select-option value="stem_loop">
+                                    Stem loop design mode
+                                </a-select-option>
+                            </a-select>
+                        </a-form-item>
                         <a-form-item v-for="(reaction, index) in reactionData" :key="index" :label="reaction.ec_number" has-feedback>
                             <a-textarea
                                 v-decorator="[
@@ -98,6 +121,8 @@ export default {
             e.preventDefault();
             this.form.validateFieldsAndScroll((err, values) => {
                 if (!err) {
+                    let mode = values.mode;
+                    delete values.mode;
                     const formData = [];
                     const regex = /^[ATCGatcgUu]+$/;
                     for (let key in values){
@@ -125,23 +150,44 @@ export default {
                         }
                     }
                     this.curStep = 1;
-                    axios.post('/api/rap/build', {
-                        formData})
-                        .then(response => {
-                            if (response.data) {
-                                this.$message.success(response.data.message);
-                                this.taskID =  response.data.taskID;
-                                let filename = this.taskID + '.zip';
-                                this.url = '/download/' + filename
-                                console.log(filename);
-                                this.curStep = 2;
-                                window.open(this.url);
-                                this.form.resetFields();
-                            }})
-                        .catch(error => {
-                            console.error(error);
-                            this.$message.error(error.message);
-                        });
+                    if (mode==='rbs'){
+                        axios.post('/api/rap/build', {
+                            formData})
+                            .then(response => {
+                                if (response.data) {
+                                    this.$message.success(response.data.message);
+                                    this.taskID =  response.data.taskID;
+                                    let filename = this.taskID + '.zip';
+                                    this.url = '/download/' + filename
+                                    console.log(filename);
+                                    this.curStep = 2;
+                                    window.open(this.url);
+                                    this.form.resetFields();
+                                }})
+                            .catch(error => {
+                                console.error(error);
+                                this.$message.error(error.message);
+                            });
+                    }
+                    if(mode==='stem_loop'){
+                        axios.post('/api/rap/build/stemLoop', {
+                            formData})
+                            .then(response => {
+                                if (response.data) {
+                                    this.$message.success(response.data.message);
+                                    this.taskID =  response.data.taskID;
+                                    let filename = this.taskID + '.zip';
+                                    this.url = '/download/' + filename
+                                    console.log(filename);
+                                    this.curStep = 2;
+                                    window.open(this.url);
+                                    this.form.resetFields();
+                                }})
+                            .catch(error => {
+                                console.error(error);
+                                this.$message.error(error.message);
+                            });
+                    }
                 }
             });
         },

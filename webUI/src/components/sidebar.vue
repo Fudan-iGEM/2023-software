@@ -104,7 +104,7 @@ export default {
 }
 .logo p{
     font-size: 60px;
-    color: rgb(255, 246, 240);
+    color: #e37654;
     margin: 0;
 }
 </style>
