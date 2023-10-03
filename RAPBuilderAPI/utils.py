@@ -58,7 +58,7 @@ def generate_stem_loop(TIR_target: float) -> str:
     :return: estimated stem loop
     """
     dG_stem_loop, stem_loop, estimator, iterations = rb.utils.monte_carlo_stem_loop(TIR_target)
-    return stem_loop
+    return rb.constant.pre_seq_stem_loop + stem_loop
 
 
 def init_builder(folder_name:str) -> None:
@@ -252,10 +252,10 @@ def build_pRAP_system_stem_loop(data_list: list[dict]) -> tuple[Response, int]:
             loc += len(cds)
             combined_sequence += stem_loop
             sequences.append(
-                {'EC_number': ec_number, 'loc': [loc + len(stem_loop), loc + len(stem_loop)],
+                {'EC_number': ec_number, 'loc': [loc + 27, loc + len(stem_loop)],
                  'type': 'stem_loop', 'description': f'stem-loop for {ec_number} at optimal ratio of {optimal_ratio}',
                  'id': id})
-            csv_list.append({'EC_number': ec_number, 'loc': [loc + len(stem_loop), loc + len(stem_loop)],
+            csv_list.append({'EC_number': ec_number, 'loc': [loc + 27, loc + len(stem_loop)],
                              'type': 'stem_loop',
                              'description': f'stem-loop for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id,
                              'sequence': stem_loop, 'mode':mode})
@@ -306,10 +306,10 @@ def build_pRAP_system_stem_loop(data_list: list[dict]) -> tuple[Response, int]:
             loc += len(cds)
             combined_sequence += stem_loop
             sequences.append(
-                {'EC_number': ec_number, 'loc': [loc + len(stem_loop), loc + len(stem_loop)],
+                {'EC_number': ec_number, 'loc': [loc + 27, loc + len(stem_loop)],
                  'type': 'stem_loop', 'description': f'stem-loop for {ec_number} at optimal ratio of {optimal_ratio}',
                  'id': id})
-            csv_list.append({'EC_number': ec_number, 'loc': [loc + len(stem_loop), loc + len(stem_loop)],
+            csv_list.append({'EC_number': ec_number, 'loc': [loc + 27, loc + len(stem_loop)],
                              'type': 'stem_loop',
                              'description': f'stem-loop for {ec_number} at optimal ratio of {optimal_ratio}', 'id': id,
                              'sequence': stem_loop, 'mode':mode})

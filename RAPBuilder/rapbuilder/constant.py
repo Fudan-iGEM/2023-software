@@ -42,5 +42,6 @@ start_codons = ["ATG", "AUG", "GTG", "GUG", "TTG", "UUG"]
 start_codon_energies = {"ATG": -1.194, "AUG": -1.194, "GTG": -0.0748, "GUG": -0.0748, "TTG": -0.0435, "UUG": -0.0435,
                         "CTG": -0.03406, "CUG": -0.03406}
 # Stem loop sequence
+pre_seq_stem_loop = 'AAACACCCACCACAATTTCCACCGTTT'
 stem_loop = 'CCCGACGCTTCGGCGTCGGG'
 cutoff_stem_loop = 30

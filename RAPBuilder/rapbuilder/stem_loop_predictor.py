@@ -6,6 +6,7 @@
 @Time : 2023/9/19 23:19
 """
 import RNA
+from rapbuilder import constant
 
 
 class CalcError(Exception):
@@ -48,7 +49,8 @@ class StemLoopPredictor:
         """
         :return: the mfe of stem loop
         """
-        fc = RNA.fold_compound(self.stem_loop, self.md)
+        stem_loop = constant.pre_seq_stem_loop + self.stem_loop
+        fc = RNA.fold_compound(stem_loop, self.md)
         ss, mfe = fc.mfe()
         return mfe
 

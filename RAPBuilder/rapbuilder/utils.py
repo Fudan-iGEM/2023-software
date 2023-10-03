@@ -423,7 +423,8 @@ def monte_carlo_stem_loop(TIR_target: float = 0, stem_loop_init: str = None, dG_
     """
     if TIR_target:
         ...
-    dG_target = min(max(dG_target, StemLoopPredictor(constant.stem_loop).calc_dG_stem_loop()), 0.)
+    dG_target = min(max(dG_target, StemLoopPredictor(constant.pre_seq_stem_loop+constant.stem_loop).calc_dG_stem_loop())
+                    , 0.)
     tol = 0.1  # kcal/mol
     annealing_accept_ratios = [0.01, 0.20]  # first is min, second is max
     annealing_min_moves = 50

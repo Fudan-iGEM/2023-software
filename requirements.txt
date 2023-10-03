@@ -18,7 +18,7 @@ py2neo==2021.2.3
 Pygments==2.16.1
 PyMySQL==1.1.0
 pytz==2023.3
-rapBuilder==0.2.2
+rapBuilder==0.2.4
 six==1.16.0
 tqdm==4.66.1
 urllib3==2.0.4
