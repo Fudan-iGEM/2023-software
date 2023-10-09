@@ -82,6 +82,11 @@ def treeMap():
     return render_template('treeMap.html')
 
 
+@app.route('/demo')
+def demo():
+    return render_template('demo.html')
+
+
 # for apis
 @app.route('/api/search/reaction', methods=['POST'])
 def handle_search_reaction():

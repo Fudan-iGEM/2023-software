@@ -12,7 +12,7 @@
                     <a-form :form="form" @submit="handleSubmit" layout='horizontal' style="width: 80%" v-if="curStep===0">
                         <a-form-item label="Mode" has-feedback>
                             <a-select
-                                v-decorator="[
+                                    v-decorator="[
                                       'mode',
                                       {
                                         rules: [
@@ -21,6 +21,7 @@
                                             message: 'Please select design mode!',
                                           },
                                         ],
+                                        initialValue: 'rbs'
                                       },
                                     ]"
                             >
@@ -34,7 +35,7 @@
                         </a-form-item>
                         <a-form-item v-for="(reaction, index) in reactionData" :key="index" :label="reaction.ec_number" has-feedback>
                             <a-textarea
-                                v-decorator="[
+                                    v-decorator="[
                                       reaction.id,
                                       {
                                         rules: [
@@ -43,10 +44,11 @@
                                             message: 'Please input coding sequence!',
                                           },
                                         ],
+                                        initialValue: reaction.sequence
                                       },
                                     ]"
-                                :placeholder="'Coding Sequence of EC' + reaction.ec_number"
-                                :rows="3"
+                                    :placeholder="'Coding Sequence of EC' + reaction.ec_number"
+                                    :rows="3"
                             />
                         </a-form-item>
                         <a-form-item>
@@ -79,43 +81,18 @@ export default {
     beforeCreate() {
         this.form = this.$form.createForm(this, { name: 'sequences' });
     },
-    created() {
-        if (localStorage.getItem('reactions') === null){
-            this.$message.warn('There is no reaction added, please add reactions!');
-            setTimeout(function() {
-                window.location.href = '/buildReactions';
-            }, 4500);
-        }
-        if (localStorage.getItem('optimalRatio') !== null){
-            this.optimalRatio = JSON.parse(localStorage.getItem('optimalRatio'));
-            this.getReactionData(this.optimalRatio);
-        }
-        else {
-            this.$message.warn('There is no reaction built, please build reactions!');
-            setTimeout(function() {
-                window.location.href = '/buildReactions';
-            }, 4500);
-        }
-    },
     data() {
         return {
             defaultActivate:['5'],
             curStep:0,
-            reactionData:null,
-            url:null
+            reactionData:[{id: "76812", sequence:"atggcggctattaatacaaaagttaagaaagcggttatcccggtggcaggccttggcacaagaatgcttccggcaacaaaagcaattccgaaagaaatgcttccgctggttgataaaccgcttattcaatatgtggtgaatgaatgcattgcggcaggaattacagaaattgttctggtgacacatagctcaaaaaatagcattgaaaaccatttcgacacaagctttgaactggaagcgatgctggaaaaaagagtgaaaagacagctgctggatgaagtgcagagcatttgtccgccgcatgttacaattatgcaagtgagacaaggcctggcaaaaggacttggccatgcggttctgtgcgcgcatccggttgttggagatgagccggttgcagttattctgccggatgtgattctggatgaatatgaatcagacctgtcacaggataatctggcggaaatgattagaagatttgatgaaacaggccatagccaaattatggtggagccggttgcggatgtgacagcatatggagttgttgattgcaaaggagtggaactggcaccgggagaaagcgttccgatggtgggcgtggttgaaaaaccgaaagcagatgtggcaccgagcaatctggcgattgttggcagatatgttctgtcagcggatatttggccgctgctggcaaaaacaccgccgggcgcaggcgatgaaattcaacttacagatgcaattgatatgctgattgaaaaagaaacagtggaagcgtatcatatgaaaggaaaaagccatgattgcggaaataagcttggatatatgcaggcgtttgttgaatatggaattagacataatacgctgggcacagagttcaaagcatggcttgaagaagaaatgggcattaagaaataa", optimalRatio: 1, ec_number: "2.7.7.9"},
+                {id: "76813", sequence: "atggcaattcataacagagcaggccaaccggcacaacagtcagaccttattaatgtggcacagcttacagcacaatattatgttcttaaaccggaagcaggaaatgcagaacatgcagttaaatttggaacaagcggacatagaggatcagcggcgagacatagctttaatgaaccgcatattctggcgattgcacaggcgattgcggaagaaagagcgaaaaatggaattacaggcccgtgctatgttggaaaagatacacatgcgctgagcgaaccggcattcatttcagtgcttgaagtgctggcagcgaatggcgtggatgtgattgtgcaggaaaataatggctttacaccgacaccggcagttagcaatgcgattctggttcataataagaaaggcggaccgctggcggatggcattgttattacaccgagccataatccgccggaagatggaggcattaagtataatccgccgaatggaggaccggcggatacaaatgttacaaaagtggttgaagatagagcgaatgcgcttcttgcggatggactgaaaggcgttaaaagaattagcctggatgaagcaatggcaagcggccatgttaaagaacaagaccttgtgcagccgtttgtggaaggccttgcagatattgttgatatggcggcaattcagaaagcaggccttacacttggagttgatccgcttggaggctcaggaattgaatattggaaaagaattggcgaatactataaccttaacctgacaattgtgaatgatcaagttgatcaaacattcagattcatgcatctggataaagatggcgcgattagaatggattgttcaagcgaatgcgcaatggcgggactgctggcgcttagagataaatttgatctggcgtttgcgaatgatccggattatgatagacatggcattgttacaccggcgggacttatgaatccgaatcattatcttgcagttgcgattaattacctttttcaacatagaccgcaatggggcaaagatgtggcggtgggaaaaacactggtgagcagcgcaatgattgatagagtggttaatgatctgggcagaaaactggttgaagttccggtgggctttaaatggtttgttgatggactgtttgatggctcatttggctttggaggagaagaatcagcgggagcgtcatttctgagatttgatggcacaccgtggagcacagataaagatggaattattatgtgcctgcttgcagcagaaattacagcagttacaggcaaaaatccgcaagaacattataatgaactggcgaaaagatttggagcgccgagctataatagacttcaagcggcggcaacatcagcacaaaaagcggcactttcaaaactgagcccggaaatggttagcgcaagcacacttgcgggagatccgattacagcgagacttacagcagcgccgggcaatggcgcatcaattggcggactgaaagttatgacagataatggctggtttgcggcaagaccgtcaggcacagaagatgcatataaaatctattgcgaatcattcctgggagaagaacatagaaaacagattgaaaaagaggcggttgaaattgtttcagaagttcttaaaaacgcataa", optimalRatio: 0.26201153106982705, ec_number: "5.4.2.2"}],
+            optimalRatio:[{"76812":1},{"76813":0.26201153106982705}],
+            url:null,
+            design:'rbs'
         };
     },
     methods:{
-        async getReactionData(optimalRatio){
-            axios.post('/api/rap/reactionData', {
-                'optimalRatio':optimalRatio})
-                .then(response => {
-                    this.reactionData = response.data})
-                .catch(error => {
-                    console.error(error);
-                    this.$message.error(error.message);
-                });
-        },
         async handleSubmit(e){
             e.preventDefault();
             this.form.validateFieldsAndScroll((err, values) => {

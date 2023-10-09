@@ -130,6 +130,17 @@ module.exports = {
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
         title: 'RAP | Tree Map',
       },
+      demo: {
+        // entry for the pages
+        entry: 'src/views/demo/demo.js',
+        // the source template
+        template: 'src/views/demo/demo.html',
+        // output as dist/index.html
+        filename: 'demo.html',
+        // when using title option,
+        // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'RAP | Demo',
+      },
     },
   css:{
     loaderOptions:{
