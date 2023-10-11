@@ -16,7 +16,7 @@ import config
 from KineticHub.db_api import search_reaction, search_kcat, get_all_ec_numbers, add_kcat2mysql, test_connection, \
     get_reaction_data, calc_optimal_ratio, get_reaction_data_from_optimal_ratio
 from PartHub2.utils import parthub_search, create_parthub_seq_file, get_part_id
-from RAPBuilderAPI.utils import build_pRAP_system_rbs
+from RAPBuilderAPI.utils import build_pRAP_system_rbs, build_pRAP_system_stem_loop
 
 db_config = config.db_config
 parthub_config = config.parthub_config
@@ -184,6 +184,21 @@ def handle_rap_build():
     data_list = data.get('formData')
     try:
         res = build_pRAP_system_rbs(data_list)
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
+    if res[1] != 200:
+        app.logger.warning(str(res[0].data.decode('utf-8')))
+    return res
+
+@app.route('/api/rap/build/stemLoop', methods=['POST'])
+def handle_rap_build_stem_loop():
+    data = request.json
+    if not data or not data.get('formData'):
+        app.logger.warning('Missing sequences on /RAPBuilder')
+        return jsonify({"message": 'Missing sequences on /RAPBuilder'}), 400
+    data_list = data.get('formData')
+    try:
+        res = build_pRAP_system_stem_loop(data_list)
     except Exception as e:
         return jsonify({"message": str(e)}), 500
     if res[1] != 200:

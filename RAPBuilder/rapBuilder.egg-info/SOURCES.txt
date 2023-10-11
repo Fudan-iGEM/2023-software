@@ -8,6 +8,7 @@ rapBuilder.egg-info/top_level.txt
 rapbuilder/__init__.py
 rapbuilder/config.py
 rapbuilder/constant.py
+rapbuilder/model.joblib
 rapbuilder/rbs_predictor.py
 rapbuilder/stem_loop_predictor.py
 rapbuilder/utils.py

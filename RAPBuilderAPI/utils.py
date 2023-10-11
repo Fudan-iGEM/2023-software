@@ -28,7 +28,7 @@ stem_loop_seq = 'AAACACCCACCACAATTTCCACCGTTTCCCGACGCTTCGGCGTCGGG'
 # default rbs sequence for stem loop design mode
 rbs_seq = 'TTTAAGAAGGAGATATACAT'
 geometric_mean_TIR_rbs = 263.4
-geometric_mean_TIR_stem_loop = 263.4
+geometric_mean_TIR_stem_loop = 1.77
 
 
 def generate_rbs(cds: str, TIR_target: float, is_first: bool = False, is_last: bool = False) -> str:

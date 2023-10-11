@@ -9,11 +9,15 @@ from setuptools import setup, find_packages
 
 setup(
     name='rapBuilder',
-    version='0.2.4',
+    version='0.3.4',
     packages=find_packages(),
+    package_data = {
+        '': ['*.joblib'],
+    },
     install_requires=[
         'ViennaRNA==2.6.3',
         'tqdm',
+        'scikit-learn==1.3.1'
     ],
     python_requires='>=3.10',
     platforms='linux_x86_64',

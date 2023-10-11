@@ -21,6 +21,10 @@ import re
 import sys
 from copy import deepcopy
 
+import joblib
+import numpy as np
+import pkg_resources
+from sklearn.svm import SVR
 from tqdm import tqdm
 
 from rapbuilder import config
@@ -422,7 +426,10 @@ def monte_carlo_stem_loop(TIR_target: float = 0, stem_loop_init: str = None, dG_
     :return: tuple contains results
     """
     if TIR_target:
-        ...
+        TIR_target = max(min(TIR_target, 3.5), 0.9)
+        model_path = pkg_resources.resource_filename('rapbuilder', 'model.joblib')
+        svr = joblib.load(model_path)
+        dG_target = inverse_svr(svr, math.log(TIR_target))
     dG_target = min(max(dG_target, StemLoopPredictor(constant.pre_seq_stem_loop+constant.stem_loop).calc_dG_stem_loop())
                     , 0.)
     tol = 0.1  # kcal/mol
@@ -501,3 +508,23 @@ def monte_carlo_stem_loop(TIR_target: float = 0, stem_loop_init: str = None, dG_
             return estimator.dG_stem_loop, stem_loop, estimator, counter
     pbar.close()
     return estimator.dG_stem_loop, stem_loop, estimator, counter
+
+
+def inverse_svr(svr: SVR, y_target: float) -> float:
+    """
+    :param svr: SVR model
+    :param y_target: float
+    :return: corresponding x
+    """
+    def loss(x, y_target):
+        y_pred = svr.predict(np.array(x).reshape(1, -1))
+        return abs(y_pred - y_target)
+    min_x = -14
+    min_loss = loss(min_x, y_target)
+    for x in np.linspace(-14,-2,100):
+        if loss(x, y_target) < 0.01:
+            return x
+        if min_loss > loss(x, y_target):
+            min_x = x
+            min_loss = loss(x, y_target)
+    return min_x
