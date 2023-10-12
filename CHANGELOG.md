@@ -1,9 +1,12 @@
-# [](https://gitlab.igem.org/2023/software-tools/fudan/compare/v0.3.2-beta...v) (2023-10-11)
+# [](https://gitlab.igem.org/2023/software-tools/fudan/compare/v0.3.2-beta...v) (2023-10-12)
 
 
 ### Features
 
 * add demo page ([a66f0c4](https://gitlab.igem.org/2023/software-tools/fudan/commit/a66f0c4db469d04552c5e7ba2c4ba9f0a4b816e4))
+* finish stem loop design mode ([2d51fc4](https://gitlab.igem.org/2023/software-tools/fudan/commit/2d51fc4230a0d5052c6ca8ef96558898c50cffb9))
+* update docker ([e54e0cd](https://gitlab.igem.org/2023/software-tools/fudan/commit/e54e0cd2948d21acc956746d2882b169dd9fe7db))
+* update notebook ([edf907b](https://gitlab.igem.org/2023/software-tools/fudan/commit/edf907bbb60c534780a4d2c7dbfc6391afebdb47))
 * update stem loop prediction ([fa95e0d](https://gitlab.igem.org/2023/software-tools/fudan/commit/fa95e0d8012de2c3dea2a138f8e13ef542b373f1))
 
 
