@@ -1,47 +1,86 @@
 # Team Fudan 2023 Software Tool                           
 
-If you team competes in the [**Software & AI** village](https://competition.igem.org/participation/villages) or wants to
-apply for the [**Best Software Tool** prize](https://competition.igem.org/judging/awards), you **MUST** host all the
-code of your team's software tool in this repository, `main` branch. By the **Wiki Freeze**, a
-[release](https://docs.gitlab.com/ee/user/project/releases/) will be automatically created as the judging artifact of
-this software tool. You will be able to keep working on your software after the Grand Jamboree.
+![](https://static.igem.wiki/teams/4765/wiki/czy/rap-logo.png)
 
 ![](https://badgen.net/badge/platform/Linux,macOS,Windows?list=%7C)
 ![](https://badgen.net/static/Python/3.10/blue)
 ![](https://badgen.net/static/vue/2.6+/green)
 ![](https://badgen.net/static/license/CC%20BY%204.0/blue)
-![](https://badgen.net/docker/size/mistyfield/rap/0.3.1-beta)
+![](https://badgen.net/docker/size/mistyfield/rap/0.4.1-beta)
 
-> If your team does not have any software tool, you can totally ignore this repository. If left unchanged, this
-> repository will be automatically deleted by the end of the season.
+RAP is a quantitative pRAP system design software developed by Fudan iGEM 2023. Live demo of RAP is available. Visit our live demo [here](http://54.169.242.254:5000/)!
 
 ## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might
-be unfamiliar with (for example your team wiki). A list of Features or a Background subsection can also be added here.
-If there are alternatives to your project, this is a good place to list differentiating factors.
+
+For more information, please visit our [wiki page](https://2023.igem.wiki/fudan/software).
+
+### Features
+
+- Intuitive WebUI with APIs for flexible development
+- Compatible with GenBank format, and easy integration with [SnapGene(opens new window)](https://www.snapgene.com/)
+- Full DBTL cycle support
+- Experimentally validated results
+- Up-to-date documentation and tutorial videos
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew.
-However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing
-specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a
-specific context like a particular programming language version or operating system or has dependencies that have to be
-installed manually, also add a Requirements subsection.
+
+### Supported platforms
+
+|    Windows     |  Linux   |  macOS   |
+| :------------: | :------: | :------: |
+| ✅(wsl2, amd64) | ✅(amd64) | ✅(amd64) |
+
+
+
+## Install with docker(recommended)
+
+Since the installation process requires docker, please install [docker](https://www.docker.com/) first.
+
+```shell
+docker pull mistyfield/kinetichub:v0.1.0-beta mistyfield/rap:0.4.1-beta mistyfield/parthub:0.1.0-beta
+docker run -p 3306:3306 kinetichub
+docker run -p 5000:5000 rap
+docker run -p 7474:7474 -p 7687:7687 parthub
+```
+
+## Install with source code
+
+This project requires the use of docker and yarn for deployment, so please install [docker](https://www.docker.com/) and [node.js](https://nodejs.org/en) with [yarn](https://yarnpkg.com/) first!
+
+```shell
+git clone https://gitlab.igem.org/2023/software-tools/fudan
+# compile webUI
+cd fudan/webUI
+yarn install
+cd ../
+sh pack.sh
+docker compose up -d
+```
+
+After that RAP will be running at http://127.0.0.1:5000.
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of
-usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably
-include in the README.
+
+For more information on Usage, please visit our [wiki](https://2023.igem.wiki/fudan/software/) or [documentation](https://mistyfield.github.io/RAP-Docs/).
+
 
 ## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+### Pull Requests
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started.
-Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps
-explicit. These instructions could also be useful to your future self.
+We actively welcome your pull requests.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce
-the likelihood that the changes inadvertently break something. Having instructions for running tests is especially
-helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+1. Fork the repo and create your branch from `main`.
+2. If you've added code that should be tested, add tests.
+3. If you've changed APIs, update the documentation.
+4. Make sure your code lints.
+
+In order to accept your pull request, please send me an [email](mailto:20301050198@fudan.edu.cn).
+
+### Issues
+
+We use GitLab issues to track bugs. Please describe your issue clearly and give sufficient instructions to reproduce the issue.
 
 ## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+### Author
+
+- Zhiyue Chen ([@mistyfield](https://gitlab.igem.org/mistyfield))
